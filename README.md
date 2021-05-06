@@ -39,7 +39,9 @@
 
 ## 🏃🏻 Sprint
 
-Sprint 는 여기서 확인해주세요  👉🏻  [여기](https://www.notion.so/9c747de51fb74015998225a27b1708a1)
+Sprint 는 Notion 과 Project 에서 확인 할 수 있습니다.
+- Notion 에서 확인하기 👉🏻  [Notion](https://www.notion.so/9c747de51fb74015998225a27b1708a1)
+- Project 에서 확인하기 👉🏻 [Project](https://github.com/DevBloo/tu_software_BookManagementApp/projects)
 
 <br>
 <br>
