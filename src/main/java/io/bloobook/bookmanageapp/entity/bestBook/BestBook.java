@@ -2,10 +2,12 @@ package io.bloobook.bookmanageapp.entity.bestBook;
 
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.book.Book;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +28,6 @@ public class BestBook extends BaseTimeEntity {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne (mappedBy = "bestBook")
-    private Book book;
-
+    @JoinColumn (name = "book_id")
+    private Long bookId;
 }

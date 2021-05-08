@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -45,9 +46,14 @@ public class Category extends BaseTimeEntity {
     @OneToMany (
         mappedBy = "category",
         fetch = FetchType.LAZY,
-        cascade = CascadeType.PERSIST,
+        cascade = CascadeType.REFRESH,
         orphanRemoval = true
     )
     private final List<Book> books = new ArrayList<> ();
 
+    @Builder
+    public Category ( @NonNull CategoryName categoryName, CategoryStatus categoryStatus ) {
+        this.categoryName = categoryName;
+        this.categoryStatus = categoryStatus;
+    }
 }
