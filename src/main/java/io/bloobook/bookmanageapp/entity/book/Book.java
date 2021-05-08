@@ -8,6 +8,7 @@ import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.rental.Rental;
 import java.time.LocalDate;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.Builder;
@@ -28,6 +30,7 @@ import lombok.ToString;
  * @CreateBy: Bloo
  * @Date: 2021/05/06
  */
+
 
 @ToString(exclude = {"publisher", "bookLocation", "rental", "category","bestBook"})
 @NoArgsConstructor
@@ -80,10 +83,15 @@ public class Book extends BaseTimeEntity {
     @ManyToOne (fetch = FetchType.LAZY)
     private Publisher publisher;
 
-    @OneToOne
+    @OneToOne (
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.PERSIST )
     private BookLocation bookLocation;
 
-    @OneToOne
+    @OneToOne (
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.REMOVE,
+        orphanRemoval = true )
     private BestBook bestBook;
 
     @ManyToOne (fetch = FetchType.LAZY)
@@ -92,20 +100,21 @@ public class Book extends BaseTimeEntity {
     @Builder
     public Book ( @NonNull String bookCode, @NonNull String title,
         @NonNull String bookIntroduction, @NonNull String author,
-        @NonNull String thumbnail, int stockCount, int totalRentalCount,
+        @NonNull String thumbnail,
         @NonNull BookStatus bookStatus, @NonNull LocalDate publicationAt,
-        BookLocation bookLocation, BestBook bestBook,
+        Publisher publisher, BookLocation bookLocation, BestBook bestBook,
         Category category ) {
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
         this.author = author;
         this.thumbnail = thumbnail;
-        this.stockCount = stockCount;
-        this.totalRentalCount = totalRentalCount;
+        this.stockCount = 0;
+        this.totalRentalCount = 0;
         this.bookStatus = bookStatus;
         this.publicationAt = publicationAt;
         this.bookLocation = bookLocation;
+        this.publisher = publisher;
         this.bestBook = bestBook;
         this.category = category;
     }
@@ -127,4 +136,16 @@ public class Book extends BaseTimeEntity {
     public void removeBookRental () {
         this.rental = null;
     }
+
+    public void increaseStockCount (int stockCount) {
+        this.stockCount = stockCount;
+    }
+
+    public void increaseTotalRentalCount () {
+       this.totalRentalCount += 1;
+    }
+
+    /*
+
+     */
 }
