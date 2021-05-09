@@ -30,8 +30,7 @@
 <br>
 
 ## 📋 사용자 스토리
-
-![](https://images.velog.io/images/somday/post/5e32ede5-5bff-466b-8738-5cff3518e9de/%EB%8F%84%EC%84%9C%EA%B4%80%EB%A6%AC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%82%AC%EC%9A%A9%EC%9E%90%20story.png)
+![](https://images.velog.io/images/somday/post/bb97f920-5d4b-4bf0-9dc1-73f51ced9b8d/%EB%8F%84%EC%84%9C%EA%B4%80%EB%A6%AC%20%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%82%AC%EC%9A%A9%EC%9E%90%20story.png)
 
 <br>
 <br>
