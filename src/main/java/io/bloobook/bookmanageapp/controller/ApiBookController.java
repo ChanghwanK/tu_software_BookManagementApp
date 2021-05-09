@@ -28,8 +28,8 @@ public class ApiBookController {
     public ResponseEntity<Void> saveNewBook (
         @RequestBody @Valid BookSaveRequest bookSaveRequest ) {
 
-        log.info ( "Book Save Request >> {}", bookSaveRequest );
-        bookService.saveNeBook ( bookSaveRequest );
-        return ResponseEntity.created ( URI.create ( "/api/books" ) ).build ();
+        log.info("Book Save Request >> {}", bookSaveRequest);
+        bookService.saveNeBook(bookSaveRequest);
+        return ResponseEntity.created(URI.create("/api/books")).build();
     }
 }

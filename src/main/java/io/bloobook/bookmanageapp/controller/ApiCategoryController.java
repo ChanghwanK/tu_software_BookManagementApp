@@ -26,7 +26,7 @@ public class ApiCategoryController {
 
     @PostMapping ("")
     public ResponseEntity<Void> saveNewCategory ( @RequestBody CategorySaveRequest request ) {
-        categoryService.saveNewCategory ( request );
-        return ResponseEntity.created ( URI.create ( "/api/category" ) ).build ();
+        categoryService.saveNewCategory(request);
+        return ResponseEntity.created(URI.create("/api/category")).build();
     }
 }
