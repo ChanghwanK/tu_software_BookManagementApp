@@ -29,13 +29,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
 
 	// Query DSL
 	implementation 'com.querydsl:querydsl-jpa'
 
 	// H2
-	runtimeOnly 'com.h2database:h2'
+	// runtimeOnly 'com.h2database:h2'
+
+	// MARIA DB
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// LOMBOK
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	// SPRING BOOT TEST

@@ -3,8 +3,6 @@ package io.bloobook.bookmanageapp.entity.book;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import io.bloobook.bookmanageapp.common.enumclass.CategoryName;
-import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
@@ -14,16 +12,11 @@ import io.bloobook.bookmanageapp.entity.category.CategoryRepository;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.publisher.PublisherRepository;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -52,7 +45,7 @@ class BookRepositoryTest {
     @BeforeEach
     void setUp () {
          bookLocation = BookLocation.builder ()
-            .categoryCode ( CategoryName.ART.getDescription () )
+            .categoryName ( "ART" )
             .locationCode ( "B-2열 2층 선반" )
             .build ();
 
@@ -65,7 +58,7 @@ class BookRepositoryTest {
             .build ();
 
          category = Category.builder ()
-            .categoryName ( CategoryName.NOVEL )
+            .categoryName ( "ART" )
             .categoryStatus ( CategoryStatus.REGISTER )
             .build ();
 
@@ -73,7 +66,6 @@ class BookRepositoryTest {
             .title ( "King Of Lear" )
             .author ( "셰익스피어" )
             .bookCode ( "A03-2938-9382" )
-            .bookStatus ( BookStatus.REGISTER )
             .bookIntroduction ( "리어왕 이야기 소개글 입니다." )
             .thumbnail ( "www.ei2opeie.ewoewii" )
             .publicationAt ( LocalDate.of ( 1685,8,12 ) )
@@ -97,7 +89,7 @@ class BookRepositoryTest {
        // then
        Book savedBook = bookRepository.findById ( 1L ).get ();
        assertAll (
-           () -> assertThat ( savedBook.getCategory ().getCategoryName () ).isEqualTo ( CategoryName.NOVEL ),
+           () -> assertThat ( savedBook.getCategory ().getCategoryName () ).isEqualTo ( "ART" ),
            () -> assertThat ( savedBook.getBookLocation ().getLocationCode () ).isEqualTo ( "B-2열 2층 선반" ),
            () -> assertThat ( savedBook.getPublisher ().getBusinessNumber () ).isEqualTo ( "A-29384-293818" ),
            () -> assertThat ( savedBook.getBookCode () ).isEqualTo ( "A03-2938-9382" )

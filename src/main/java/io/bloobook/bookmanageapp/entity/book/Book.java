@@ -2,10 +2,10 @@ package io.bloobook.bookmanageapp.entity.book;
 
 import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
-import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
+import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.rental.Rental;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
@@ -17,7 +17,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.Builder;
@@ -98,12 +97,8 @@ public class Book extends BaseTimeEntity {
     private Category category;
 
     @Builder
-    public Book ( @NonNull String bookCode, @NonNull String title,
-        @NonNull String bookIntroduction, @NonNull String author,
-        @NonNull String thumbnail,
-        @NonNull BookStatus bookStatus, @NonNull LocalDate publicationAt,
-        Publisher publisher, BookLocation bookLocation, BestBook bestBook,
-        Category category ) {
+    public Book ( @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author, @NonNull String thumbnail,
+        LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, BestBook bestBook, Category category ) {
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
@@ -111,7 +106,7 @@ public class Book extends BaseTimeEntity {
         this.thumbnail = thumbnail;
         this.stockCount = 0;
         this.totalRentalCount = 0;
-        this.bookStatus = bookStatus;
+        this.bookStatus = BookStatus.REGISTER;
         this.publicationAt = publicationAt;
         this.bookLocation = bookLocation;
         this.publisher = publisher;
@@ -123,6 +118,15 @@ public class Book extends BaseTimeEntity {
         if ( publisher != null ) {
             this.publisher = publisher;
         }
+    }
+
+    public void setBookLocation ( BookLocation bookLocation ) {
+        this.bookLocation = bookLocation;
+    }
+
+    public void setCategoryInfo ( Category category ) {
+        this.category = category;
+        category.addBook ( this );
     }
 
     public void addRentalInfo ( Rental rental ) {
@@ -144,8 +148,4 @@ public class Book extends BaseTimeEntity {
     public void increaseTotalRentalCount () {
        this.totalRentalCount += 1;
     }
-
-    /*
-
-     */
 }
