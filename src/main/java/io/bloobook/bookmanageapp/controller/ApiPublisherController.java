@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * [ 구현 기능 ] - 신규 등록 - 출판사 정보 수정 - 출판사 정보 조회 - 등록 해제
+ * [ 구현 기능 ] - 신규 등록 (구현) - 출판사 정보 수정 - 출판사 정보 조회 - 등록 해제
  *
  * @CreateBy: Bloo
  * @Date: 2021/05/09

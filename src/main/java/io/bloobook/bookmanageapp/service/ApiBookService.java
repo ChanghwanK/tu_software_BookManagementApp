@@ -30,9 +30,12 @@ public class ApiBookService {
 
     @Transactional
     public Book saveNeBook ( BookSaveRequest bookSaveRequest ) {
-        Book baseBook = bookSaveRequest.toEntity ();
+        Book baseBook = bookSaveRequest.toBaseBookEntity ();
         Category category = findCategoryById ( bookSaveRequest.getCategoryId () );
-        BookLocation bookLocation = addBookLocation ( category );
+
+        BookLocation bookLocation = addBookLocation ( category,
+            bookSaveRequest.getLocationCode () );
+
         Publisher publisher = findPublisherByBusinessNumber (
             bookSaveRequest.getPublisherBusinessNumber () );
 
@@ -48,10 +51,10 @@ public class ApiBookService {
         return baseBook;
     }
 
-    private BookLocation addBookLocation ( Category category ) {
+    private BookLocation addBookLocation ( Category category, String location ) {
         return BookLocation.builder ()
-            .categoryName ( "ART" )
-            .locationCode ( "1층 A - 2 선반" )
+            .categoryName ( category.getCategoryName () )
+            .locationCode ( location )
             .build ();
     }
 
