@@ -31,20 +31,19 @@ public class BookLocation extends BaseTimeEntity {
     private Long bookId;
 
     @Column (nullable = false)
-    private String categoryCode;
+    private String categoryName;
 
     @Column (nullable = false)
     private String locationCode;
 
     @Builder
-    public BookLocation ( String categoryCode, String locationCode ) {
-        this.categoryCode = categoryCode;
+    public BookLocation ( String categoryName, String locationCode ) {
+        this.categoryName = categoryName;
         this.locationCode = locationCode;
     }
 
     public String getLocationInfo () {
-        return categoryCode + " - " + locationCode;
+        return categoryName + " - " + locationCode;
     }
-
 
 }
