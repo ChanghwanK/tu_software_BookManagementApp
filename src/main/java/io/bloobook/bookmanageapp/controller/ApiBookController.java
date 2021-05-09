@@ -25,10 +25,11 @@ public class ApiBookController {
     private final ApiBookService bookService;
 
     @PostMapping ("")
-    public ResponseEntity<Void> saveNewBook (@RequestBody @Valid BookSaveRequest bookSaveRequest) {
+    public ResponseEntity<Void> saveNewBook (
+        @RequestBody @Valid BookSaveRequest bookSaveRequest ) {
+
         log.info ( "Book Save Request >> {}", bookSaveRequest );
-        bookService.saveNeBook (bookSaveRequest);
+        bookService.saveNeBook ( bookSaveRequest );
         return ResponseEntity.created ( URI.create ( "/api/books" ) ).build ();
     }
-
 }
