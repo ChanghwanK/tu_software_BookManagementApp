@@ -43,6 +43,10 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// RESTDocs
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.4.RELEASE'
+
+
 	// SPRING BOOT TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
@@ -57,6 +61,14 @@ test {
 asciidoctor {
 	inputs.dir snippetsDir
 	dependsOn test
+}
+
+bootJar {
+	dependsOn asciidoctor
+	copy {
+		from "build/asciidoc/html5"
+		into "src/main/resources/static/docs"
+	}
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
