@@ -1,0 +1,90 @@
+= Book Management API Guide
+Changhwan Kim;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:snippets: /Users/levi/Desktop/dev/workspace/bookmanageapp/build/generated-snippets
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[overview]]
+= Overview
+
+[[overview_http_verbs]]
+== HTTP verbs
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP verbs.
+
+|===
+| Verb | Usage
+
+| `GET`
+| 도서 조회를 위한 method
+
+| `POST`
+| 도서 등록을 위한 method
+
+| `PUT`
+| 도서 수정을 위한 method
+
+| `DELETE`
+| 도서 삭제를 위한 method
+|===
+
+
+
+[[overview_http_status_codes]]
+== HTTP status codes
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+|===
+
+
+
+[[resources_books_create]]
+== 도서 등록
+
+
+==== Request Sample
+
+
+include::{snippets}/books/save/http-request.adoc[]
+
+---
+
+
+
+include::{snippets}/books/save/request-fields.adoc[]
+
+---
+
+=== Response Sample
+
+
+include::{snippets}/books/save/http-response.adoc[]
+
+
+
+
+

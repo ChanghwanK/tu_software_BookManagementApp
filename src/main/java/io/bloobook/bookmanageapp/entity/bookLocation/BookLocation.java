@@ -17,7 +17,7 @@ import lombok.ToString;
  * @Date: 2021/05/06
  */
 @ToString
-@NoArgsConstructor ( access =  AccessLevel.PROTECTED )
+@NoArgsConstructor (access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class BookLocation extends BaseTimeEntity {
@@ -27,20 +27,19 @@ public class BookLocation extends BaseTimeEntity {
     private Long id;
 
     @Column (nullable = false)
-    private String categoryCode;
+    private String categoryName;
 
     @Column (nullable = false)
     private String locationCode;
 
     @Builder
-    public BookLocation ( String categoryCode, String locationCode ) {
-        this.categoryCode = categoryCode;
+    public BookLocation ( String categoryName, String locationCode ) {
+        this.categoryName = categoryName;
         this.locationCode = locationCode;
     }
 
     public String getLocationInfo () {
-        return categoryCode + " - " + locationCode;
+        return categoryName + " - " + locationCode;
     }
-
 
 }

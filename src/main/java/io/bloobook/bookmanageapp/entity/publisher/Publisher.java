@@ -59,7 +59,7 @@ public class Publisher extends BaseTimeEntity {
         fetch = FetchType.LAZY,
         orphanRemoval = true
     )
-    private final List<Book> books = new ArrayList<> ();
+    private final List<Book> books = new ArrayList<>();
 
     @Builder
     public Publisher ( @NonNull String businessNumber, @NonNull String telNumber,
@@ -72,8 +72,8 @@ public class Publisher extends BaseTimeEntity {
         this.publisherStatus = publisherStatus;
     }
 
-    public void addBook(Book book) {
+    public void addBook ( Book book ) {
         book.setRelationWithPublisher(this);
-        books.add ( book );
+        books.add(book);
     }
 }

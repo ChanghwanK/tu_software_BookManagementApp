@@ -2,12 +2,13 @@ package io.bloobook.bookmanageapp.entity.book;
 
 import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
-import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
+import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.rental.Rental;
 import java.time.LocalDate;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,7 +30,8 @@ import lombok.ToString;
  * @Date: 2021/05/06
  */
 
-@ToString(exclude = {"publisher", "bookLocation", "rental", "category","bestBook"})
+
+@ToString (exclude = { "publisher", "bookLocation", "rental", "category", "bestBook" })
 @NoArgsConstructor
 @Getter
 @Entity
@@ -40,7 +42,7 @@ public class Book extends BaseTimeEntity {
     private Long id;
 
     @NonNull
-    @Column (nullable = false)
+    @Column (nullable = false, unique = true)
     private String bookCode;
 
     @NonNull
@@ -56,7 +58,7 @@ public class Book extends BaseTimeEntity {
     private String author;
 
     @NonNull
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String thumbnail;
 
     @Column (nullable = false)
@@ -80,32 +82,36 @@ public class Book extends BaseTimeEntity {
     @ManyToOne (fetch = FetchType.LAZY)
     private Publisher publisher;
 
-    @OneToOne
+    @OneToOne (
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.PERSIST)
     private BookLocation bookLocation;
 
-    @OneToOne
+    @OneToOne (
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.REMOVE,
+        orphanRemoval = true)
     private BestBook bestBook;
 
     @ManyToOne (fetch = FetchType.LAZY)
     private Category category;
 
     @Builder
-    public Book ( @NonNull String bookCode, @NonNull String title,
-        @NonNull String bookIntroduction, @NonNull String author,
-        @NonNull String thumbnail, int stockCount, int totalRentalCount,
-        @NonNull BookStatus bookStatus, @NonNull LocalDate publicationAt,
-        BookLocation bookLocation, BestBook bestBook,
+    public Book ( @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction,
+        @NonNull String author, @NonNull String thumbnail,
+        LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, BestBook bestBook,
         Category category ) {
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
         this.author = author;
         this.thumbnail = thumbnail;
-        this.stockCount = stockCount;
-        this.totalRentalCount = totalRentalCount;
-        this.bookStatus = bookStatus;
+        this.stockCount = 0;
+        this.totalRentalCount = 0;
+        this.bookStatus = BookStatus.REGISTER;
         this.publicationAt = publicationAt;
         this.bookLocation = bookLocation;
+        this.publisher = publisher;
         this.bestBook = bestBook;
         this.category = category;
     }
@@ -116,8 +122,17 @@ public class Book extends BaseTimeEntity {
         }
     }
 
+    public void setBookLocation ( BookLocation bookLocation ) {
+        this.bookLocation = bookLocation;
+    }
+
+    public void setRelationWithCategory ( Category category ) {
+        this.category = category;
+        category.addBook(this);
+    }
+
     public void addRentalInfo ( Rental rental ) {
-        if (this.rental == null) {
+        if ( this.rental == null ) {
             this.rental = rental;
         } else {
             // TODO: 2021.05.06 -Blue "이미 등록된 대여 정보가 있습니다." 반환
@@ -126,5 +141,13 @@ public class Book extends BaseTimeEntity {
 
     public void removeBookRental () {
         this.rental = null;
+    }
+
+    public void increaseStockCount ( int stockCount ) {
+        this.stockCount = stockCount;
+    }
+
+    public void increaseTotalRentalCount () {
+        this.totalRentalCount += 1;
     }
 }

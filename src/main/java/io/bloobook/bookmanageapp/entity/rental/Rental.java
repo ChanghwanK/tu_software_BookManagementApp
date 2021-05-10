@@ -43,13 +43,12 @@ public class Rental extends BaseTimeEntity {
     @ManyToOne
     private User user;
 
-
     @OneToMany (
         mappedBy = "rental",
         fetch = FetchType.LAZY,
         orphanRemoval = true
     )
-    private final Map<Long, Book> books = new HashMap<> ();
+    private final Map<Long, Book> books = new HashMap<>();
 
 
     @NonNull
@@ -65,16 +64,16 @@ public class Rental extends BaseTimeEntity {
     }
 
     public void returnPeriodExtend () {
-        this.expiredAt.plusWeeks ( 1 );
+        this.expiredAt.plusWeeks(1);
     }
 
     public void startBookRental ( Book book ) {
-        book.addRentalInfo ( this );
-        books.put ( book.getId (), book );
+        book.addRentalInfo(this);
+        books.put(book.getId(), book);
     }
 
     public void endBookRental ( Book book ) {
-        book.removeBookRental ();
-        books.remove ( book.getId (), book );
+        book.removeBookRental();
+        books.remove(book.getId(), book);
     }
 }
