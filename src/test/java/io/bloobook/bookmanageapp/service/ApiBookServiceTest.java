@@ -41,7 +41,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ApiBookServiceTest {
 
     @InjectMocks
-    private ApiBookService apiBookService;
+    private ApiBookService bookService;
 
     @Mock
     private BookRepository bookRepository;
@@ -106,10 +106,10 @@ class ApiBookServiceTest {
         when(publisherRepository.findByBusinessNumber(anyString()))
             .thenReturn(Optional.of(publisher));
 
-        apiBookService.saveNeBook(bookSaveRequest);
+        bookService.saveNeBook(bookSaveRequest);
 
         // then
-        verify(bookRepository,times(1)).save(any());
+        verify(bookRepository, times(1)).save(any());
     }
 
     @DisplayName ("이미 존재하는 도서에 대한 예외 테스트")
@@ -123,13 +123,13 @@ class ApiBookServiceTest {
 
         // then
         assertThrows(
-            AlreadyExistBookException.class, () -> apiBookService.saveNeBook(bookSaveRequest)
+            AlreadyExistBookException.class, () -> bookService.saveNeBook(bookSaveRequest)
         );
     }
 
-    @DisplayName("출판사 사업자 번호가 잘못된 예외 테스트")
+    @DisplayName ("출판사 사업자 번호가 잘못된 예외 테스트")
     @Test
-    void ifPublisherBusinessNumberNotFound() {
+    void ifPublisherBusinessNumberNotFound () {
         // given
         // when
         when(categoryRepository.findById(anyLong()))
@@ -139,7 +139,7 @@ class ApiBookServiceTest {
             .thenReturn(Optional.empty());
         // then
         assertThrows(
-            PublisherNotFoundException.class, () -> apiBookService.saveNeBook(bookSaveRequest)
+            PublisherNotFoundException.class, () -> bookService.saveNeBook(bookSaveRequest)
         );
     }
 
@@ -153,7 +153,7 @@ class ApiBookServiceTest {
             .thenReturn(Optional.empty());
         // then
         assertThrows(
-            CategoryNotFoundException.class, () -> apiBookService.saveNeBook(bookSaveRequest)
+            CategoryNotFoundException.class, () -> bookService.saveNeBook(bookSaveRequest)
         );
     }
 }

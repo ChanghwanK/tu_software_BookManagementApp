@@ -21,14 +21,14 @@ public class ApiCategoryService {
 
     @Transactional
     public Category saveNewCategory ( CategorySaveRequest request ) {
-        String categoryName = request.getCategoryName ();
-        isDuplicatedName ( categoryName );
-        return categoryRepository.save ( request.toEntity () );
+        String categoryName = request.getCategoryName();
+        isDuplicatedName(categoryName);
+        return categoryRepository.save(request.toEntity());
     }
 
     private void isDuplicatedName ( String categoryName ) {
-        if ( categoryRepository.findByCategoryName ( categoryName ).isPresent () ) {
-            throw new AlreadyExistCategoryException ( categoryName );
+        if ( categoryRepository.findByCategoryName(categoryName).isPresent() ) {
+            throw new AlreadyExistCategoryException(categoryName);
         }
     }
 }

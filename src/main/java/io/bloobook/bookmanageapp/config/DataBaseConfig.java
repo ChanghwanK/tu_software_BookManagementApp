@@ -14,8 +14,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @Configuration
 public class DataBaseConfig {
+
     @Bean
-    public JPAQueryFactory jpaQueryFactory( EntityManager entityManager) {
+    public JPAQueryFactory jpaQueryFactory ( EntityManager entityManager ) {
         return new JPAQueryFactory(entityManager);
     }
 }

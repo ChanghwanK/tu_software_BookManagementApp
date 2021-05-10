@@ -31,7 +31,7 @@ import lombok.ToString;
  */
 
 
-@ToString(exclude = {"publisher", "bookLocation", "rental", "category","bestBook"})
+@ToString (exclude = { "publisher", "bookLocation", "rental", "category", "bestBook" })
 @NoArgsConstructor
 @Getter
 @Entity
@@ -58,7 +58,7 @@ public class Book extends BaseTimeEntity {
     private String author;
 
     @NonNull
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String thumbnail;
 
     @Column (nullable = false)
@@ -84,21 +84,23 @@ public class Book extends BaseTimeEntity {
 
     @OneToOne (
         fetch = FetchType.LAZY,
-        cascade = CascadeType.PERSIST )
+        cascade = CascadeType.PERSIST)
     private BookLocation bookLocation;
 
     @OneToOne (
         fetch = FetchType.LAZY,
         cascade = CascadeType.REMOVE,
-        orphanRemoval = true )
+        orphanRemoval = true)
     private BestBook bestBook;
 
     @ManyToOne (fetch = FetchType.LAZY)
     private Category category;
 
     @Builder
-    public Book ( @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author, @NonNull String thumbnail,
-        LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, BestBook bestBook, Category category ) {
+    public Book ( @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction,
+        @NonNull String author, @NonNull String thumbnail,
+        LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, BestBook bestBook,
+        Category category ) {
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
@@ -126,11 +128,11 @@ public class Book extends BaseTimeEntity {
 
     public void setRelationWithCategory ( Category category ) {
         this.category = category;
-        category.addBook ( this );
+        category.addBook(this);
     }
 
     public void addRentalInfo ( Rental rental ) {
-        if (this.rental == null) {
+        if ( this.rental == null ) {
             this.rental = rental;
         } else {
             // TODO: 2021.05.06 -Blue "이미 등록된 대여 정보가 있습니다." 반환
@@ -141,11 +143,11 @@ public class Book extends BaseTimeEntity {
         this.rental = null;
     }
 
-    public void increaseStockCount (int stockCount) {
+    public void increaseStockCount ( int stockCount ) {
         this.stockCount = stockCount;
     }
 
     public void increaseTotalRentalCount () {
-       this.totalRentalCount += 1;
+        this.totalRentalCount += 1;
     }
 }

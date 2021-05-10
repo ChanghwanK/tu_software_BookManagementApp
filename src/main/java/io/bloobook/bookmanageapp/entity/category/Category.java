@@ -49,7 +49,7 @@ public class Category extends BaseTimeEntity {
         cascade = CascadeType.REFRESH,
         orphanRemoval = true
     )
-    private final List<Book> books = new ArrayList<> ();
+    private final List<Book> books = new ArrayList<>();
 
     @Builder
     public Category ( @NonNull String categoryCode, @NonNull String categoryName,
@@ -60,6 +60,6 @@ public class Category extends BaseTimeEntity {
     }
 
     public void addBook ( Book book ) {
-        books.add ( book );
+        books.add(book);
     }
 }

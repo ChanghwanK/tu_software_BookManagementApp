@@ -32,13 +32,13 @@ public class PublisherSaveRequest {
     private String address;
 
 
-    public Publisher toEntity() {
-        return Publisher.builder ()
-            .businessNumber ( businessNumber )
-            .telNumber ( telNumber )
-            .name ( name )
-            .address ( address )
-            .publisherStatus ( PublisherStatus.REGISTER )
-            .build ();
+    public Publisher toEntity () {
+        return Publisher.builder()
+            .businessNumber(businessNumber)
+            .telNumber(telNumber)
+            .name(name)
+            .address(address)
+            .publisherStatus(PublisherStatus.REGISTER)
+            .build();
     }
 }
