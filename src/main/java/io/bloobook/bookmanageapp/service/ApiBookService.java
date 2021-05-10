@@ -1,6 +1,7 @@
 package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
@@ -30,20 +31,24 @@ public class ApiBookService {
 
     @Transactional
     public Book saveNeBook ( BookSaveRequest bookSaveRequest ) {
-        Book baseBook = bookSaveRequest.toBaseBookEntity();
-        Category category = findCategoryById(bookSaveRequest.getCategoryId());
+        isDuplicatedBook(bookSaveRequest.getBookCode());
 
-        BookLocation bookLocation = createLocation(category,
-            bookSaveRequest.getLocationCode());
+        Book baseBook = bookSaveRequest.toBaseBookEntity();
+
+        Category category = findCategoryById(bookSaveRequest.getCategoryId());
 
         Publisher publisher = findPublisherByBusinessNumber(
             bookSaveRequest.getPublisherBusinessNumber());
 
-        return bookRepository.save(createBookRelationOf (baseBook, category, bookLocation, publisher));
+        BookLocation bookLocation = createLocation(category,
+            bookSaveRequest.getLocationCode());
+
+        return bookRepository
+            .save(createBookRelationOf(baseBook, category, bookLocation, publisher));
     }
 
     /**
-     *  해당 인자들과 baseBook 과의 연관관계를 설정한다.
+     * 해당 인자들과 baseBook 과의 연관관계를 설정한다.
      */
     private Book createBookRelationOf ( Book baseBook, Category category, BookLocation bookLocation,
         Publisher publisher ) {
@@ -51,6 +56,12 @@ public class ApiBookService {
         baseBook.setCategoryInfo(category);
         baseBook.setBookLocation(bookLocation);
         return baseBook;
+    }
+
+    private void isDuplicatedBook ( String bookCode ) {
+        if ( bookRepository.findByBookCode(bookCode).isPresent() ) {
+            throw new AlreadyExistBookException(bookCode);
+        }
     }
 
     private BookLocation createLocation ( Category category, String location ) {

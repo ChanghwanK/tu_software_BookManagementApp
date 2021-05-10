@@ -1,6 +1,9 @@
 package io.bloobook.bookmanageapp.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,6 +11,9 @@ import static org.mockito.Mockito.when;
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
+import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
+import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
@@ -50,7 +56,7 @@ class ApiBookServiceTest {
     private Category category;
     private Publisher publisher;
     private BookLocation bookLocation;
-    private Book book;
+    private Book baseBook;
 
     @BeforeEach
     void setUp () {
@@ -66,7 +72,8 @@ class ApiBookServiceTest {
             .publicationAt(LocalDate.of(2015, 4, 23))
             .build();
 
-        book = bookSaveRequest.toBaseBookEntity();
+        baseBook = bookSaveRequest.toBaseBookEntity();
+
         bookLocation = BookLocation.builder()
             .categoryName("문학")
             .locationCode("A열 2층 선반")
@@ -93,15 +100,60 @@ class ApiBookServiceTest {
         // given
 
         // when
-        when(categoryRepository.findById(1L))
+        when(categoryRepository.findById(anyLong()))
             .thenReturn(Optional.of(category));
 
-        when(publisherRepository.findByBusinessNumber("2309-A3933-2222"))
+        when(publisherRepository.findByBusinessNumber(anyString()))
             .thenReturn(Optional.of(publisher));
 
         apiBookService.saveNeBook(bookSaveRequest);
 
         // then
         verify(bookRepository,times(1)).save(any());
+    }
+
+    @DisplayName ("이미 존재하는 도서에 대한 예외 테스트")
+    @Test
+    void ifAlreadyExistBook () {
+        // given
+
+        // when
+        when(bookRepository.findByBookCode(anyString()))
+            .thenReturn(Optional.of(baseBook));
+
+        // then
+        assertThrows(
+            AlreadyExistBookException.class, () -> apiBookService.saveNeBook(bookSaveRequest)
+        );
+    }
+
+    @DisplayName("출판사 사업자 번호가 잘못된 예외 테스트")
+    @Test
+    void ifPublisherBusinessNumberNotFound() {
+        // given
+        // when
+        when(categoryRepository.findById(anyLong()))
+            .thenReturn(Optional.of(category));
+
+        when(publisherRepository.findByBusinessNumber(anyString()))
+            .thenReturn(Optional.empty());
+        // then
+        assertThrows(
+            PublisherNotFoundException.class, () -> apiBookService.saveNeBook(bookSaveRequest)
+        );
+    }
+
+    @DisplayName ("카테고리 Id가 잘못된 예외 테스트")
+    @Test
+    void ifCategoryNotFound () {
+        // given
+
+        // when
+        when(categoryRepository.findById(anyLong()))
+            .thenReturn(Optional.empty());
+        // then
+        assertThrows(
+            CategoryNotFoundException.class, () -> apiBookService.saveNeBook(bookSaveRequest)
+        );
     }
 }

@@ -42,7 +42,7 @@ public class Book extends BaseTimeEntity {
     private Long id;
 
     @NonNull
-    @Column (nullable = false)
+    @Column (nullable = false, unique = true)
     private String bookCode;
 
     @NonNull
