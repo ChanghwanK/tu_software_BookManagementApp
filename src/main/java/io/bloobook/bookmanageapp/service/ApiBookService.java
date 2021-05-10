@@ -1,6 +1,7 @@
 package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
@@ -30,41 +31,53 @@ public class ApiBookService {
 
     @Transactional
     public Book saveNeBook ( BookSaveRequest bookSaveRequest ) {
-        Book baseBook = bookSaveRequest.toBaseBookEntity ();
-        Category category = findCategoryById ( bookSaveRequest.getCategoryId () );
+        isDuplicatedBook(bookSaveRequest.getBookCode());
 
-        BookLocation bookLocation = addBookLocation ( category,
-            bookSaveRequest.getLocationCode () );
+        Book baseBook = bookSaveRequest.toBaseBookEntity();
 
-        Publisher publisher = findPublisherByBusinessNumber (
-            bookSaveRequest.getPublisherBusinessNumber () );
+        Category category = findCategoryById(bookSaveRequest.getCategoryId());
+
+        Publisher publisher = findPublisherByBusinessNumber(
+            bookSaveRequest.getPublisherBusinessNumber());
+
+        BookLocation bookLocation = createLocation(category,
+            bookSaveRequest.getLocationCode());
 
         return bookRepository
-            .save ( createNewBook ( baseBook, category, bookLocation, publisher ) );
+            .save(createBookRelationOf(baseBook, category, bookLocation, publisher));
     }
 
-    private Book createNewBook ( Book baseBook, Category category, BookLocation bookLocation,
+    /**
+     * 해당 인자들과 baseBook 과의 연관관계를 설정한다.
+     */
+    private Book createBookRelationOf ( Book baseBook, Category category, BookLocation bookLocation,
         Publisher publisher ) {
-        baseBook.setRelationWithPublisher ( publisher );
-        baseBook.setCategoryInfo ( category );
-        baseBook.setBookLocation ( bookLocation );
+        baseBook.setRelationWithPublisher(publisher);
+        baseBook.setRelationWithCategory(category);
+        baseBook.setBookLocation(bookLocation);
         return baseBook;
     }
 
-    private BookLocation addBookLocation ( Category category, String location ) {
-        return BookLocation.builder ()
-            .categoryName ( category.getCategoryName () )
-            .locationCode ( location )
-            .build ();
+    private void isDuplicatedBook ( String bookCode ) {
+        if ( bookRepository.findByBookCode(bookCode).isPresent() ) {
+            throw new AlreadyExistBookException(bookCode);
+        }
+    }
+
+    private BookLocation createLocation ( Category category, String location ) {
+        return BookLocation.builder()
+            .categoryName(category.getCategoryName())
+            .locationCode(location)
+            .build();
     }
 
     private Category findCategoryById ( Long categoryId ) {
-        return categoryRepository.findById ( categoryId )
-            .orElseThrow ( () -> new CategoryNotFoundException ( categoryId ) );
+        return categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new CategoryNotFoundException(categoryId));
     }
 
     private Publisher findPublisherByBusinessNumber ( String businessNumber ) {
-        return publisherRepository.findByBusinessNumber ( businessNumber )
-            .orElseThrow ( () -> new PublisherNotFoundException ( businessNumber ) );
+        return publisherRepository.findByBusinessNumber(businessNumber)
+            .orElseThrow(() -> new PublisherNotFoundException(businessNumber));
     }
 }

@@ -28,7 +28,7 @@ public class ApiPublisherController {
 
     @PostMapping
     public ResponseEntity<Void> saveNewPublisher ( @RequestBody PublisherSaveRequest request ) {
-        publisherService.saveNewPublisher ( request );
-        return ResponseEntity.created ( URI.create ( "/api/publisher" ) ).build ();
+        publisherService.saveNewPublisher(request);
+        return ResponseEntity.created(URI.create("/api/publisher")).build();
     }
 }

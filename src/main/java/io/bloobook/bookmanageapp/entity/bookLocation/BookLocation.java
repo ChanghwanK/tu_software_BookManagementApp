@@ -17,7 +17,7 @@ import lombok.ToString;
  * @Date: 2021/05/06
  */
 @ToString
-@NoArgsConstructor ( access =  AccessLevel.PROTECTED )
+@NoArgsConstructor (access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class BookLocation extends BaseTimeEntity {

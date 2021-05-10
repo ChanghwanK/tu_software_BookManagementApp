@@ -22,14 +22,14 @@ public class ApiPublisherService {
 
     @Transactional
     public Publisher saveNewPublisher ( PublisherSaveRequest request ) {
-        String businessNumber = request.getBusinessNumber ();
-        isDuplicatedBusinessNumber( businessNumber );
-        return publisherRepository.save ( request.toEntity () );
+        String businessNumber = request.getBusinessNumber();
+        isDuplicatedBusinessNumber(businessNumber);
+        return publisherRepository.save(request.toEntity());
     }
 
     private void isDuplicatedBusinessNumber ( String businessNumber ) {
-        if (publisherRepository.findByBusinessNumber ( businessNumber ).isPresent ()) {
-            throw new AlreadyExistPublisherException ( businessNumber );
+        if ( publisherRepository.findByBusinessNumber(businessNumber).isPresent() ) {
+            throw new AlreadyExistPublisherException(businessNumber);
         }
     }
 }
