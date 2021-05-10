@@ -53,7 +53,7 @@ public class ApiBookService {
     private Book createBookRelationOf ( Book baseBook, Category category, BookLocation bookLocation,
         Publisher publisher ) {
         baseBook.setRelationWithPublisher(publisher);
-        baseBook.setCategoryInfo(category);
+        baseBook.setRelationWithCategory(category);
         baseBook.setBookLocation(bookLocation);
         return baseBook;
     }

@@ -124,7 +124,7 @@ public class Book extends BaseTimeEntity {
         this.bookLocation = bookLocation;
     }
 
-    public void setCategoryInfo ( Category category ) {
+    public void setRelationWithCategory ( Category category ) {
         this.category = category;
         category.addBook ( this );
     }

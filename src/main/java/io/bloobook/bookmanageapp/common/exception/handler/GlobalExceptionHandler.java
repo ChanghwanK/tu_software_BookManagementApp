@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus (HttpStatus.BAD_REQUEST)
-    @ExceptionHandler (CategoryNotFoundException.class)
+    @ExceptionHandler (AlreadyExistBookException.class)
     public ErrorResponse handleAlreadyExistBookException ( AlreadyExistBookException ex ) {
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
