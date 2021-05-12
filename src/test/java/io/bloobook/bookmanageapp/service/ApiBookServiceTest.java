@@ -112,6 +112,17 @@ class ApiBookServiceTest {
         verify(bookRepository, times(1)).save(any());
     }
 
+    @DisplayName ("Id를 통해 도서 정보 조회")
+    @Test
+    void findBookById () {
+        // given
+
+        // when
+
+        // then
+
+    }
+
     @DisplayName ("이미 존재하는 도서에 대한 예외 테스트")
     @Test
     void ifAlreadyExistBook () {

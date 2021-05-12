@@ -1,7 +1,9 @@
 package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
+import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
@@ -47,6 +49,18 @@ public class ApiBookService {
             .save(createBookRelationOf(baseBook, category, bookLocation, publisher));
     }
 
+    @Transactional (readOnly = true)
+    public BookDetailResponse findBookById ( Long id ) {
+        // Book findBook = bookRepository.findById(id).orElseThrow(() -> new BookNotException(id));
+        // 일단 조회는 다된다.
+        Book findBook = bookRepository
+            .findByIdJoinFetch(id).orElseThrow(() -> new BookNotFoundException(id));
+//        Category category = findBook.getCategory();
+//        Publisher publisher =findBook.getPublisher();
+        log.info("페치 조인을 통해 조회한 도서 >>> {}", findBook);
+        return BookDetailResponse.of (findBook);
+    }
+
     /**
      * 해당 인자들과 baseBook 과의 연관관계를 설정한다.
      */
@@ -55,6 +69,7 @@ public class ApiBookService {
         baseBook.setRelationWithPublisher(publisher);
         baseBook.setRelationWithCategory(category);
         baseBook.setBookLocation(bookLocation);
+        baseBook.increaseStockCount(5);
         return baseBook;
     }
 
