@@ -2,6 +2,7 @@ package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
@@ -13,6 +14,8 @@ import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.category.CategoryRepository;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.publisher.PublisherRepository;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,6 +62,12 @@ public class ApiBookService {
         return BookDetailResponse.of(findBook);
     }
 
+    @Transactional (readOnly = true)
+    public List<BookSimpleResponse> findBooksByTitle ( String title ) {
+        List<Book> books = bookRepository.findByTitleContaining(title);
+        return Collections.unmodifiableList(BookSimpleResponse.listOf(books));
+    }
+
     /**
      * 해당 인자들과 baseBook 과의 연관관계를 설정한다.
      */
@@ -93,4 +102,5 @@ public class ApiBookService {
         return publisherRepository.findByBusinessNumber(businessNumber)
             .orElseThrow(() -> new PublisherNotFoundException(businessNumber));
     }
+
 }

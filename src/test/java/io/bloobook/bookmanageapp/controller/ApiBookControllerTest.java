@@ -78,4 +78,26 @@ class ApiBookControllerTest {
             .andExpect(status().isCreated())
             .andDo(BookDocumentation.saveNewBook());
     }
+
+    @DisplayName ("도서 상세 조회 컨트롤러 테스트")
+    @Test
+    void findBookById () {
+        // given
+        // TODO: 2021.05.13 -Blue - 상세 조회 테스트 구현하기 및 RESTDocs 적용 해주세요
+        // when
+
+        // then
+
+    }
+
+    @DisplayName ("잘못된 도서 Id에 대한 예외 테스트")
+    @Test
+    void ifBookNotFound () {
+        // given
+        // TODO: 2021.05.13 -Blue  -> 잘못된 도서 Id에 대한 테스트 구현 및 RESTDocs 적용 해주세요
+        // when
+
+        // then
+
+    }
 }

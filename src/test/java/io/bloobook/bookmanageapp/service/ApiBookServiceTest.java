@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
@@ -25,6 +26,7 @@ import io.bloobook.bookmanageapp.entity.category.CategoryRepository;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.publisher.PublisherRepository;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,8 +77,6 @@ class ApiBookServiceTest {
             .publicationAt(LocalDate.of(2015, 4, 23))
             .build();
 
-        baseBook = bookSaveRequest.toBaseBookEntity();
-
         bookLocation = BookLocation.builder()
             .categoryName("문학")
             .locationCode("A열 2층 선반")
@@ -95,6 +95,11 @@ class ApiBookServiceTest {
             .address("서울특별시 서초")
             .publisherStatus(PublisherStatus.REGISTER)
             .build();
+
+        baseBook = bookSaveRequest.toBaseBookEntity();
+        baseBook.setBookLocation(bookLocation);
+        baseBook.setRelationWithCategory(category);
+        baseBook.setRelationWithPublisher(publisher);
     }
 
     @DisplayName ("도서 저장 서비스 테스트")
@@ -118,10 +123,6 @@ class ApiBookServiceTest {
     @Test
     void findBookById () {
         // given
-        baseBook.setBookLocation(bookLocation);
-        baseBook.setRelationWithCategory(category);
-        baseBook.setRelationWithPublisher(publisher);
-
         // when
         // 안되면 진짜 Book 을 만들어서 해보자
         when(bookRepository.findByIdJoinFetch(anyLong()))
@@ -136,6 +137,32 @@ class ApiBookServiceTest {
             () -> assertThat(bookDetailResponse.getPublisherName()).isEqualTo(publisher.getName()),
             () -> assertThat(bookDetailResponse.getPublisherTelNumber()).isEqualTo(publisher.getTelNumber()),
             () -> assertThat(bookDetailResponse.getBookLocation()).isEqualTo(bookLocation.getLocationInfo())
+        );
+    }
+
+    @DisplayName ("title 을 이용한 도서 정보 조회 테스트")
+    @Test
+    void findBooksByTitle () {
+        // given
+        Book testBook = bookSaveRequest.toBaseBookEntity();
+        testBook.setBookLocation(bookLocation);
+        testBook.setRelationWithCategory(category);
+        testBook.setRelationWithPublisher(publisher);
+
+        // when
+        when(bookRepository.findByTitleContaining(anyString()))
+            .thenReturn(List.of(baseBook, testBook));
+        // then
+
+        List<BookSimpleResponse> bookSimpleResponses = bookService.findBooksByTitle(anyString());
+        assertAll (
+            () -> assertThat(bookSimpleResponses.size()).isEqualTo(2),
+            () -> assertThat(bookSimpleResponses.get(0).getTitle()).isEqualTo(baseBook.getTitle()),
+            () -> assertThat(bookSimpleResponses.get(0).getAuthor()).isEqualTo(baseBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(0).getThumbnailUrl()).isEqualTo(baseBook.getThumbnail()),
+            () -> assertThat(bookSimpleResponses.get(1).getTitle()).isEqualTo(testBook.getTitle()),
+            () -> assertThat(bookSimpleResponses.get(1).getAuthor()).isEqualTo(testBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(1).getThumbnailUrl()).isEqualTo(testBook.getThumbnail())
         );
     }
 
