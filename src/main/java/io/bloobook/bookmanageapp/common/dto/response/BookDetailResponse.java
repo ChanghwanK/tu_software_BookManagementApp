@@ -6,12 +6,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @CreateBy: Bloo
  * @Date: 2021/05/12
  */
 
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor (access = AccessLevel.PRIVATE)
 @Getter

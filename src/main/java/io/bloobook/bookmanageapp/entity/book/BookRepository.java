@@ -25,5 +25,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
         + "where b.id =:id" )
     Optional<Book> findByIdJoinFetch( Long id );
 
+
     Optional<Book> findByBookCode ( String bookCode );
 }

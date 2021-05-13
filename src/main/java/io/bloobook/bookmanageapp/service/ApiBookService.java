@@ -54,9 +54,6 @@ public class ApiBookService {
         Book findBook = bookRepository.findByIdJoinFetch(id)
             .orElseThrow(() -> new BookNotFoundException(id));
 
-//        Book findBook = bookRepository.findById(id)
-//            .orElseThrow(() -> new BookNotFoundException(id));
-
         log.info("페치 조인을 통해 조회한 도서 >>> {}", findBook);
 
         return BookDetailResponse.of(findBook);

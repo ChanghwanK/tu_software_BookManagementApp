@@ -1,5 +1,7 @@
 package io.bloobook.bookmanageapp.service;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -9,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
@@ -98,7 +101,6 @@ class ApiBookServiceTest {
     @Test
     void saveNewBook () {
         // given
-
         // when
         when(categoryRepository.findById(anyLong()))
             .thenReturn(Optional.of(category));
@@ -112,22 +114,35 @@ class ApiBookServiceTest {
         verify(bookRepository, times(1)).save(any());
     }
 
-    @DisplayName ("Id를 통해 도서 정보 조회")
+    @DisplayName ("Id를 통한 상세 도서 정보 조회 테스트")
     @Test
     void findBookById () {
         // given
+        baseBook.setBookLocation(bookLocation);
+        baseBook.setRelationWithCategory(category);
+        baseBook.setRelationWithPublisher(publisher);
 
         // when
-
+        // 안되면 진짜 Book 을 만들어서 해보자
+        when(bookRepository.findByIdJoinFetch(anyLong()))
+            .thenReturn(Optional.of(baseBook));
         // then
+        BookDetailResponse bookDetailResponse = bookService.findBookById(anyLong());
 
+        assertAll(
+            () -> assertThat(bookDetailResponse.getBookCode()).isEqualTo(baseBook.getBookCode()),
+            () -> assertThat(bookDetailResponse.getTitle()).isEqualTo(baseBook.getTitle()),
+            () -> assertThat(bookDetailResponse.getBookIntroduction()).isEqualTo(baseBook.getBookIntroduction()),
+            () -> assertThat(bookDetailResponse.getPublisherName()).isEqualTo(publisher.getName()),
+            () -> assertThat(bookDetailResponse.getPublisherTelNumber()).isEqualTo(publisher.getTelNumber()),
+            () -> assertThat(bookDetailResponse.getBookLocation()).isEqualTo(bookLocation.getLocationInfo())
+        );
     }
 
     @DisplayName ("이미 존재하는 도서에 대한 예외 테스트")
     @Test
     void ifAlreadyExistBook () {
         // given
-
         // when
         when(bookRepository.findByBookCode(anyString()))
             .thenReturn(Optional.of(baseBook));
@@ -148,6 +163,7 @@ class ApiBookServiceTest {
 
         when(publisherRepository.findByBusinessNumber(anyString()))
             .thenReturn(Optional.empty());
+
         // then
         assertThrows(
             PublisherNotFoundException.class, () -> bookService.saveNeBook(bookSaveRequest)
@@ -158,10 +174,10 @@ class ApiBookServiceTest {
     @Test
     void ifCategoryNotFound () {
         // given
-
         // when
         when(categoryRepository.findById(anyLong()))
             .thenReturn(Optional.empty());
+
         // then
         assertThrows(
             CategoryNotFoundException.class, () -> bookService.saveNeBook(bookSaveRequest)
