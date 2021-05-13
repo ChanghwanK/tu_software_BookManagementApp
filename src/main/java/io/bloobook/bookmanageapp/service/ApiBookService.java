@@ -51,14 +51,12 @@ public class ApiBookService {
 
     @Transactional (readOnly = true)
     public BookDetailResponse findBookById ( Long id ) {
-        // Book findBook = bookRepository.findById(id).orElseThrow(() -> new BookNotException(id));
-        // 일단 조회는 다된다.
-        Book findBook = bookRepository
-            .findByIdJoinFetch(id).orElseThrow(() -> new BookNotFoundException(id));
-//        Category category = findBook.getCategory();
-//        Publisher publisher =findBook.getPublisher();
+        Book findBook = bookRepository.findByIdJoinFetch(id)
+            .orElseThrow(() -> new BookNotFoundException(id));
+
         log.info("페치 조인을 통해 조회한 도서 >>> {}", findBook);
-        return BookDetailResponse.of (findBook);
+
+        return BookDetailResponse.of(findBook);
     }
 
     /**
