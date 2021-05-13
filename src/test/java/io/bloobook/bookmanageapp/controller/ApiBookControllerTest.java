@@ -14,8 +14,10 @@ import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
+import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.docs.BookDocumentation;
 import io.bloobook.bookmanageapp.entity.book.Book;
+import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
@@ -25,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,13 +45,16 @@ import org.springframework.web.filter.CharacterEncodingFilter;
  * @Date: 2021/05/10
  */
 
-@ExtendWith(RestDocumentationExtension.class)
+@ExtendWith (RestDocumentationExtension.class)
 @AutoConfigureRestDocs
 @WebMvcTest (ApiBookController.class)
 class ApiBookControllerTest {
 
     @MockBean
     private ApiBookService bookService;
+
+    @Mock
+    private BookRepository bookRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -63,7 +69,8 @@ class ApiBookControllerTest {
     private Book baseBook;
 
     @BeforeEach
-    void setUp ( WebApplicationContext webApplicationContext, RestDocumentationContextProvider provider ) {
+    void setUp ( WebApplicationContext webApplicationContext,
+        RestDocumentationContextProvider provider ) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .addFilter(new CharacterEncodingFilter("UTF-8"))
             .apply(documentationConfiguration(provider))
@@ -123,7 +130,6 @@ class ApiBookControllerTest {
     @Test
     void findBookById () throws Exception {
         // given
-        // TODO: 2021.05.13 -Blue - 상세 조회 테스트 구현하기 및 RESTDocs 적용 해주세요
         BookDetailResponse bookDetailResponse = BookDetailResponse.of(baseBook);
         // when
         when(bookService.findBookById(anyLong()))
@@ -141,17 +147,6 @@ class ApiBookControllerTest {
             .andDo(BookDocumentation.findBookDetail());
     }
 
-    @DisplayName ("잘못된 도서 Id에 대한 예외 테스트")
-    @Test
-    void ifBookNotFound () {
-        // given
-        // TODO: 2021.05.13 -Blue  -> 잘못된 도서 Id에 대한 테스트 구현 및 RESTDocs 적용 해주세요
-        // when
-
-        // then
-
-    }
-
     @DisplayName ("제목을 통한 도서 리스트 조회 테스트")
     @Test
     void findBooksByTitle () {
@@ -161,5 +156,21 @@ class ApiBookControllerTest {
 
         // then
 
+    }
+
+    @DisplayName ("잘못된 Id에 대한 예외 테스트")
+    @Test
+    void ifBookNotFound () throws Exception {
+        // given
+
+        // when
+        when(bookService.findBookById(anyLong()))
+            .thenThrow(new BookNotFoundException(12L));
+
+        // then
+        mockMvc.perform(get("/api/books/{id}", 12))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorCode").value(400))
+            .andExpect(jsonPath("$.errorMessage").value("해당 ID의 도서를 조회할 수 없습니다." + "  도서 ID: " + 12));
     }
 }
