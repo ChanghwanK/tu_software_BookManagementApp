@@ -20,25 +20,15 @@ import lombok.ToString;
 public class BookDetailResponse {
 
     private String bookCode;
-
     private String title;
-
     private String bookIntroduction;
-
     private String author;
-
     private String thumbnailUrl;
-
     private int stockCount;
-
     private LocalDate publicationAt;
-
     private String publisherName;
-
     private String publisherTelNumber;
-
     private String categoryName;
-
     private String bookLocation;
 
     public static BookDetailResponse of ( Book savedBook ) {

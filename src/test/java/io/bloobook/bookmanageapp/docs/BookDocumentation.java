@@ -6,6 +6,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultHandler;
@@ -28,8 +31,32 @@ public class BookDocumentation {
                 fieldWithPath("bookIntroduction").type(JsonFieldType.STRING).description("소개글"),
                 fieldWithPath("author").type(JsonFieldType.STRING).description("작가명"),
                 fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("썸네일 URL"),
-                fieldWithPath("publisherBusinessNumber").type(JsonFieldType.STRING).description("출판사 사업자 번호"),
+                fieldWithPath("publisherBusinessNumber").type(JsonFieldType.STRING)
+                    .description("출판사 사업자 번호"),
                 fieldWithPath("publicationAt").type(JsonFieldType.STRING).description("도서 설명")
+            )
+        );
+    }
+
+    public static ResultHandler findBookDetail () {
+        return document("books/findById",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("id").description("조회 도서 ID")
+            ),
+            responseFields(
+                fieldWithPath("bookCode").type(JsonFieldType.STRING).description("도서 코드"),
+                fieldWithPath("title").type(JsonFieldType.STRING).description("도서 제목"),
+                fieldWithPath("bookIntroduction").type(JsonFieldType.STRING).description("도서 소개글"),
+                fieldWithPath("author").type(JsonFieldType.STRING).description("도서 작가"),
+                fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 URL"),
+                fieldWithPath("stockCount").type(JsonFieldType.NUMBER).description("도서 재고 수량"),
+                fieldWithPath("publicationAt").type(JsonFieldType.STRING).description("도서 출판일"),
+                fieldWithPath("publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
+                fieldWithPath("publisherTelNumber").type(JsonFieldType.STRING).description("출판사 대표번호"),
+                fieldWithPath("categoryName").type(JsonFieldType.STRING).description("카테고리 명"),
+                fieldWithPath("bookLocation").type(JsonFieldType.STRING).description("도서 위치")
             )
         );
     }
