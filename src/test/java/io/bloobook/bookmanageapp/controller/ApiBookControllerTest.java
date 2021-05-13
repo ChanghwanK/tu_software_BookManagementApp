@@ -100,4 +100,15 @@ class ApiBookControllerTest {
         // then
 
     }
+
+    @DisplayName ("제목을 통한 도서 리스트 조회 테스트")
+    @Test
+    void findBooksByTitle () {
+        // given
+        // TODO: 2021.05.13 -Blue   -> 제목을 이용한 도서 리스트 테스트 구현
+        // when
+
+        // then
+
+    }
 }

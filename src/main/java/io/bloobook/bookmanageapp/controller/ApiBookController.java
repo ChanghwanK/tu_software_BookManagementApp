@@ -40,13 +40,13 @@ public class ApiBookController {
     /**
      * [ 설명 ] - 해당 메서드를 통해서는 단순히 도서 상세 정보만 조회 합니다. - 대여 정보는 RentalController 를 통해서 조회 합니다.
      */
-    @GetMapping ("{id}")
+    @GetMapping ("/{id}")
     public ResponseEntity<BookDetailResponse> findBookById ( @PathVariable Long id ) {
         log.info("Book Id: {} ", id);
         return ResponseEntity.ok().body(bookService.findBookById(id));
     }
 
-    @GetMapping ("{title}")
+    @GetMapping ("/search/{title}")
     public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
         log.info("Book Title: {}", title);
         return ResponseEntity.ok().body( bookService.findBooksByTitle (title) );

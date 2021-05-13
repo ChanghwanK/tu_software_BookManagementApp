@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class BookSimpleResponse {
     // 도서 이름, 출판사 이름, 썸네일, 작가
-
+    Long bookId;
     String title;
     String author;
     String publisherName;
@@ -25,6 +25,7 @@ public class BookSimpleResponse {
 
     public static BookSimpleResponse of ( Book book ) {
         return new BookSimpleResponse (
+            book.getId(),
             book.getTitle(),
             book.getAuthor(),
             book.getPublisher().getName(),
