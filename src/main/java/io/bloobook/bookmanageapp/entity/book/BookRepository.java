@@ -20,7 +20,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
         "select distinct b "
         + "from Book b "
         + "join fetch b.category "
-        + "join fetch b.publisher where b.id =:id" )
+        + "join fetch b.publisher "
+        + "join fetch b.bookLocation "
+        + "where b.id =:id" )
     Optional<Book> findByIdJoinFetch( Long id );
 
     Optional<Book> findByBookCode ( String bookCode );
