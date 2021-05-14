@@ -1,5 +1,6 @@
 package io.bloobook.bookmanageapp.entity.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
@@ -76,31 +77,34 @@ public class Book extends BaseTimeEntity {
     @Column (nullable = false)
     private LocalDate publicationAt;                     // 초판 발행일
 
+    @JsonIgnore
     @ManyToOne (fetch = FetchType.LAZY)
     private Rental rental;
 
+    @JsonIgnore
     @ManyToOne (fetch = FetchType.LAZY)
     private Publisher publisher;
 
+    @JsonIgnore
     @OneToOne (
         fetch = FetchType.LAZY,
         cascade = CascadeType.PERSIST)
     private BookLocation bookLocation;
 
+    @JsonIgnore
     @OneToOne (
         fetch = FetchType.LAZY,
         cascade = CascadeType.REMOVE,
         orphanRemoval = true)
     private BestBook bestBook;
 
+    @JsonIgnore
     @ManyToOne (fetch = FetchType.LAZY)
     private Category category;
 
     @Builder
-    public Book ( @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction,
-        @NonNull String author, @NonNull String thumbnail,
-        LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, BestBook bestBook,
-        Category category ) {
+    public Book ( Long id, @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author, @NonNull String thumbnail, LocalDate publicationAt) {
+        this.id = id;
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
@@ -110,10 +114,6 @@ public class Book extends BaseTimeEntity {
         this.totalRentalCount = 0;
         this.bookStatus = BookStatus.REGISTER;
         this.publicationAt = publicationAt;
-        this.bookLocation = bookLocation;
-        this.publisher = publisher;
-        this.bestBook = bestBook;
-        this.category = category;
     }
 
     public void setRelationWithPublisher ( Publisher publisher ) {
