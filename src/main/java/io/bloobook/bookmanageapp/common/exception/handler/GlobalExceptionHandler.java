@@ -4,6 +4,7 @@ import io.bloobook.bookmanageapp.common.dto.response.ErrorResponse;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistCategoryException;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistPublisherException;
+import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus (HttpStatus.BAD_REQUEST)
     @ExceptionHandler (CategoryNotFoundException.class)
     public ErrorResponse handleCategoryNotFoundException ( CategoryNotFoundException ex ) {
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ResponseStatus (HttpStatus.BAD_REQUEST)
+    @ExceptionHandler (BookNotFoundException.class)
+    public ErrorResponse handleBookNotFoundException ( BookNotFoundException ex ) {
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 

@@ -1,5 +1,6 @@
 package io.bloobook.bookmanageapp.entity.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.book.Book;
@@ -19,11 +20,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * @CreateBy: Bloo
  * @Date: 2021/05/06
  */
+@ToString
 @NoArgsConstructor (access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -43,6 +46,7 @@ public class Category extends BaseTimeEntity {
     @Enumerated (value = EnumType.STRING)
     private CategoryStatus categoryStatus;
 
+    @JsonIgnore
     @OneToMany (
         mappedBy = "category",
         fetch = FetchType.LAZY,
