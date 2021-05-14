@@ -11,12 +11,16 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query ("select b "
+    @Query (value =
+        "select distinct b "
         + "from Book b "
         + "join fetch b.category "
+        + "join fetch b.publisher "
         + "join fetch b.bookLocation "
-        + "join fetch b.category")
-    List<Book> findByIdJoinFetch( Long id );
+        + "where b.id =:id" )
+    Optional<Book> findByIdJoinFetch( Long id );
+
+    List<Book> findByTitleContaining (String title);
 
     Optional<Book> findByBookCode ( String bookCode );
 }
