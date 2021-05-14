@@ -2,7 +2,7 @@
 
 <br>
 
-![https://images.velog.io/images/somday/post/dfea2a23-c4a7-4bf0-b9b1-b023116ef531/8364.jpg](https://images.velog.io/images/somday/post/dfea2a23-c4a7-4bf0-b9b1-b023116ef531/8364.jpg)
+![](https://images.velog.io/images/somday/post/022a64e8-7452-46dd-a011-88a0ba4222dd/68747470733a2f2f696d616765732e76656c6f672e696f2f696d616765732f736f6d6461792f706f73742f64666561326132332d633461372d346266302d623962312d6230323331313665663533312f383336342e6a7067.jpeg)
 
 이미지 출처:<a href='[https://kr.freepik.com/vectors/book](https://kr.freepik.com/vectors/book)'>Book 벡터는 pch.vector - kr.freepik.com가 제작함</a>
 
