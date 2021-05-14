@@ -60,4 +60,21 @@ public class BookDocumentation {
             )
         );
     }
+
+    public static ResultHandler findBookByTitle() {
+        return document("books/findByTitle",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("title").description("도서 제목")
+                ),
+                responseFields(
+                    fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 Id"),
+                    fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 코드"),
+                    fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 코드"),
+                    fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("도서 코드"),
+                    fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING).description("도서 코드")
+                )
+            );
+    }
 }

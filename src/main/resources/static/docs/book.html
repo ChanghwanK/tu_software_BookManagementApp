@@ -627,7 +627,7 @@ Location: /api/books</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_도서_조회">도서 조회</h2>
+<h2 id="_도서_상세_조회">도서 상세 조회</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_request_2">Request</h3>
@@ -684,10 +684,108 @@ Content-Length: 408
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_tilte_을_이용한_도서_목록_조회">Tilte 을 이용한 도서 목록 조회</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_request_3">Request</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/books/search/Java HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. /api/books/search/{title}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도서 제목</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_response_3">Response</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 312
+
+[ {
+  "bookId" : 1,
+  "title" : "King Of Lear",
+  "author" : "김작가",
+  "publisherName" : "책 사랑 출판사",
+  "thumbnailUrl" : "www.google.com"
+}, {
+  "bookId" : 2,
+  "title" : "자바 도서관",
+  "author" : "Martin",
+  "publisherName" : "책 사랑 출판사",
+  "thumbnailUrl" : "www.naver.com"
+} ]</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].bookId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도서 Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도서 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].author</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도서 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].publisherName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도서 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도서 코드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-14 01:33:12 KST
+Last updated 2021-05-14 17:42:56 KST
 </div>
 </div>
 </body>

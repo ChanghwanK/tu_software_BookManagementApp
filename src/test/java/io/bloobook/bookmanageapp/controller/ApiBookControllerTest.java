@@ -1,6 +1,7 @@
 package io.bloobook.bookmanageapp.controller;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
@@ -23,6 +25,7 @@ import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.service.ApiBookService;
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,8 +72,8 @@ class ApiBookControllerTest {
     private Book baseBook;
 
     @BeforeEach
-    void setUp ( WebApplicationContext webApplicationContext,
-        RestDocumentationContextProvider provider ) {
+    void setUp ( WebApplicationContext webApplicationContext, RestDocumentationContextProvider provider ) {
+
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .addFilter(new CharacterEncodingFilter("UTF-8"))
             .apply(documentationConfiguration(provider))
@@ -88,6 +91,7 @@ class ApiBookControllerTest {
             .publisherBusinessNumber("2309-A3933-2222")
             .publicationAt(LocalDate.of(2015, 4, 23))
             .build();
+
         bookLocation = BookLocation.builder()
             .categoryName("문학")
             .locationCode("A열 2층 선반")
@@ -107,7 +111,16 @@ class ApiBookControllerTest {
             .publisherStatus(PublisherStatus.REGISTER)
             .build();
 
-        baseBook = bookSaveRequest.toBaseBookEntity();
+        baseBook = Book.builder()
+            .id(1L)
+            .bookCode(bookSaveRequest.getBookCode())
+            .title(bookSaveRequest.getTitle())
+            .bookIntroduction(bookSaveRequest.getBookIntroduction())
+            .author(bookSaveRequest.getAuthor())
+            .thumbnail(bookSaveRequest.getThumbnail())
+            .publicationAt(bookSaveRequest.getPublicationAt())
+            .build();
+
         baseBook.setBookLocation(bookLocation);
         baseBook.setRelationWithCategory(category);
         baseBook.setRelationWithPublisher(publisher);
@@ -149,20 +162,38 @@ class ApiBookControllerTest {
 
     @DisplayName ("제목을 통한 도서 리스트 조회 테스트")
     @Test
-    void findBooksByTitle () {
+    void findBooksByTitle () throws Exception {
         // given
-        // TODO: 2021.05.13 -Blue   -> 제목을 이용한 도서 리스트 테스트 구현
+        Book testBook = Book.builder()
+            .id(2L)
+            .bookCode("B-2948")
+            .title("자바 도서관")
+            .bookIntroduction("자바를 정복합시다.")
+            .author("Martin")
+            .thumbnail("www.naver.com")
+            .build();
+
+        testBook.setRelationWithPublisher(publisher);
+        testBook.setRelationWithCategory(category);
+        testBook.setBookLocation(bookLocation);
+
+
         // when
+        when(bookService.findBooksByTitle(anyString()))
+            .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
 
         // then
-
+        mockMvc.perform(get("/api/books/search/{title}","Java"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
+            .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
+            .andDo(BookDocumentation.findBookByTitle());
     }
 
     @DisplayName ("잘못된 Id에 대한 예외 테스트")
     @Test
     void ifBookNotFound () throws Exception {
         // given
-
         // when
         when(bookService.findBookById(anyLong()))
             .thenThrow(new BookNotFoundException(12L));

@@ -103,10 +103,8 @@ public class Book extends BaseTimeEntity {
     private Category category;
 
     @Builder
-    public Book ( @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction,
-        @NonNull String author, @NonNull String thumbnail,
-        LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, BestBook bestBook,
-        Category category ) {
+    public Book ( Long id, @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author, @NonNull String thumbnail, LocalDate publicationAt) {
+        this.id = id;
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
@@ -116,10 +114,6 @@ public class Book extends BaseTimeEntity {
         this.totalRentalCount = 0;
         this.bookStatus = BookStatus.REGISTER;
         this.publicationAt = publicationAt;
-        this.bookLocation = bookLocation;
-        this.publisher = publisher;
-        this.bestBook = bestBook;
-        this.category = category;
     }
 
     public void setRelationWithPublisher ( Publisher publisher ) {
