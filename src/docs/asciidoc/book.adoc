@@ -2,9 +2,10 @@
 CreateBy: Changhwan Kim;
 :doctype: book
 :icons: font
-
+:source-highlighter: highlightjs
 :snippets: /Users/levi/Desktop/dev/workspace/bookmanageapp/build/generated-snippets
 :toc: left
+:toclevels: 1
 
 
 
@@ -89,6 +90,7 @@ include::{snippets}/books/findById/path-parameters.adoc[]
 
 ---
 
+
 === Response
 include::{snippets}/books/findById/http-response.adoc[]
 
@@ -111,3 +113,20 @@ include::{snippets}/books/findByTitle/http-response.adoc[]
 
 
 include::{snippets}/books/findByTitle/response-fields.adoc[]
+
+
+---
+
+== Category Id 를 이용한 도서 목록 조회
+
+=== Request
+
+include::{snippets}/books/findAllByCategoryId/http-request.adoc[]
+
+include::{snippets}/books/findAllByCategoryId/path-parameters.adoc[]
+
+
+=== Response
+include::{snippets}/books/findAllByCategoryId/http-response.adoc[]
+
+include::{snippets}/books/findAllByCategoryId/response-fields.adoc[]
