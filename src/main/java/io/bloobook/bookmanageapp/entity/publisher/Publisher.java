@@ -1,20 +1,14 @@
 package io.bloobook.bookmanageapp.entity.publisher;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
-import io.bloobook.bookmanageapp.entity.book.Book;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,14 +52,6 @@ public class Publisher extends BaseTimeEntity {
     @Enumerated (value = EnumType.STRING)
     private PublisherStatus publisherStatus;
 
-    @JsonIgnore
-    @OneToMany (
-        mappedBy = "publisher",
-        fetch = FetchType.LAZY,
-        orphanRemoval = true
-    )
-    private final List<Book> books = new ArrayList<>();
-
     @Builder
     public Publisher ( @NonNull String businessNumber, @NonNull String telNumber,
         @NonNull String name, @NonNull String address,
@@ -77,8 +63,4 @@ public class Publisher extends BaseTimeEntity {
         this.publisherStatus = publisherStatus;
     }
 
-    public void addBook ( Book book ) {
-        book.setRelationWithPublisher(this);
-        books.add(book);
-    }
 }
