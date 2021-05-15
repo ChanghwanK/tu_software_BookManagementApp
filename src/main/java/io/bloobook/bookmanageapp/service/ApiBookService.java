@@ -1,6 +1,7 @@
 package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
@@ -72,6 +73,12 @@ public class ApiBookService {
     public List<BookSimpleResponse> findAllByCategoryId ( Long categoryId ) {
         List<Book> books = bookRepository.findAllByCategoryId(categoryId);
         return BookSimpleResponse.listOf(books);
+    }
+
+    @Transactional
+    public void updateBookInfo ( BookUpdateRequest updateRequest ) {
+        // TODO: 2021.05.16 -Blue
+        // 도서정보 수정 서비스 레이어 구현하기
     }
 
     /**

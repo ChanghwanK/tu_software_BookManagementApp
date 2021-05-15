@@ -1,6 +1,7 @@
 package io.bloobook.bookmanageapp.controller;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.service.ApiBookService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,10 +51,19 @@ public class ApiBookController {
         return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
 
-    // TODO: 2021.05.15 -Blue    -- Test 코드 작성하기
     @GetMapping ("/search/category/{categoryId}")
     public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
+    }
+    /**
+     * [ 메모 ]
+     * 작가의 요청으로 인한 도서 제목, 소개글, 썸네일 이미지 수정을 지원합니다.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateBookInfo (@PathVariable BookUpdateRequest updateRequest ) {
+        log.info("Update Request Info {}", updateRequest);
+        bookService.updateBookInfo(updateRequest);
+        return ResponseEntity.ok().build();
     }
 }
