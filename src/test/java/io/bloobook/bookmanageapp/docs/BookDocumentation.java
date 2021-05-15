@@ -31,8 +31,7 @@ public class BookDocumentation {
                 fieldWithPath("bookIntroduction").type(JsonFieldType.STRING).description("소개글"),
                 fieldWithPath("author").type(JsonFieldType.STRING).description("작가명"),
                 fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("썸네일 URL"),
-                fieldWithPath("publisherBusinessNumber").type(JsonFieldType.STRING)
-                    .description("출판사 사업자 번호"),
+                fieldWithPath("publisherBusinessNumber").type(JsonFieldType.STRING).description("출판사 사업자 번호"),
                 fieldWithPath("publicationAt").type(JsonFieldType.STRING).description("도서 설명")
             )
         );
@@ -54,8 +53,7 @@ public class BookDocumentation {
                 fieldWithPath("stockCount").type(JsonFieldType.NUMBER).description("도서 재고 수량"),
                 fieldWithPath("publicationAt").type(JsonFieldType.STRING).description("도서 출판일"),
                 fieldWithPath("publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
-                fieldWithPath("publisherTelNumber").type(JsonFieldType.STRING)
-                    .description("출판사 대표번호"),
+                fieldWithPath("publisherTelNumber").type(JsonFieldType.STRING).description("출판사 대표번호"),
                 fieldWithPath("categoryName").type(JsonFieldType.STRING).description("카테고리 명"),
                 fieldWithPath("bookLocation").type(JsonFieldType.STRING).description("도서 위치")
             )
@@ -94,5 +92,20 @@ public class BookDocumentation {
                 fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 URL")
             )
         );
+    }
+
+    public static ResultHandler updateBookInfo () {
+        return document("books/updateBook",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("id").description("도서 ID")
+                ),
+                requestFields(
+                    fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 제목").optional(),
+                    fieldWithPath("bookIntroduction").type(JsonFieldType.STRING).description("수정할 소개글").optional(),
+                    fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING).description("수정할 썸네일").optional()
+                )
+            );
     }
 }

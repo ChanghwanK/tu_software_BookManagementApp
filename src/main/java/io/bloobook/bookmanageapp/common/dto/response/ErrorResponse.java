@@ -21,13 +21,13 @@ public class ErrorResponse {
     private String errorMessage;
 
     public static ErrorResponse of ( HttpStatus httpStatus, String errorMessage ) {
-        return new ErrorResponse ( httpStatus.value (), errorMessage );
+        return new ErrorResponse(httpStatus.value(), errorMessage);
     }
 
     public static ErrorResponse of ( HttpStatus httpStatus, FieldError fieldError ) {
         if ( fieldError != null ) {
-            return new ErrorResponse ( httpStatus.value (), fieldError.getDefaultMessage () );
+            return new ErrorResponse(httpStatus.value(), fieldError.getDefaultMessage());
         }
-        return new ErrorResponse ( httpStatus.value (), "Invalid Param" );
+        return new ErrorResponse(httpStatus.value(), "Invalid Param");
     }
 }

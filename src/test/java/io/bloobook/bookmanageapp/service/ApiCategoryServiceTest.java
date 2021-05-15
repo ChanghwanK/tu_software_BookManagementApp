@@ -52,7 +52,6 @@ class ApiCategoryServiceTest {
     @Test
     void categorySave () {
         // given
-
         // when
         categoryService.saveNewCategory(saveRequest);
 
@@ -62,9 +61,8 @@ class ApiCategoryServiceTest {
 
     @DisplayName ("이미 존재하는 카테고리에 대한 예외 테스트")
     @Test
-    void  ifAlreadyExistCategory() {
+    void ifAlreadyExistCategory () {
         // given
-
         // when
         when(categoryRepository.findByCategoryName("IT/컴퓨터"))
             .thenReturn(Optional.of(newCategory));

@@ -25,6 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor (access = AccessLevel.PRIVATE)
 @Getter
 public class BookSaveRequest {
+
     private Long categoryId;
     private String locationCode;
     private String bookCode;
@@ -35,7 +36,8 @@ public class BookSaveRequest {
     private String publisherBusinessNumber;
     private LocalDate publicationAt;
 
-    public Book createNewBook ( Category category, Publisher publisher, BookLocation bookLocation ) {
+    public Book createNewBook ( Category category, Publisher publisher,
+        BookLocation bookLocation ) {
         return Book.builder()
             .bookCode(bookCode)
             .title(title)

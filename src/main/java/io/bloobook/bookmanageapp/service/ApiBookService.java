@@ -36,7 +36,7 @@ public class ApiBookService {
     private final PublisherRepository publisherRepository;
 
     @Transactional
-    public Book saveNeBook ( BookSaveRequest saveRequest ) {
+    public Book saveNewBook ( BookSaveRequest saveRequest ) {
         isDuplicatedBook(saveRequest.getBookCode());
         Category category = findCategoryById(saveRequest.getCategoryId());
 
@@ -48,7 +48,7 @@ public class ApiBookService {
     }
 
     @Transactional (readOnly = true)
-    public BookDetailResponse findBookById ( Long id ) {
+    public BookDetailResponse findBookDetailById ( Long id ) {
         Book findBook = bookRepository.findByIdJoinFetch(id)
             .orElseThrow(() -> new BookNotFoundException(id));
 
@@ -70,9 +70,9 @@ public class ApiBookService {
     }
 
     @Transactional
-    public void updateBookInfo ( BookUpdateRequest updateRequest ) {
-        // TODO: 2021.05.16 -Blue
-        // 도서정보 수정 서비스 레이어 구현하기
+    public Book updateBookInfo ( Long id, BookUpdateRequest updateRequest ) {
+        Book savedBook = findBookById(id);
+        return savedBook.updateBook(updateRequest);
     }
 
 
@@ -82,8 +82,9 @@ public class ApiBookService {
         }
     }
 
-    private Book saveNewBook ( BookSaveRequest request, Category category, Publisher publisher, BookLocation bookLocation ) {
-        Book newBook = request.createNewBook(category,publisher,bookLocation);
+    private Book saveNewBook ( BookSaveRequest request, Category category, Publisher publisher,
+        BookLocation bookLocation ) {
+        Book newBook = request.createNewBook(category, publisher, bookLocation);
         return bookRepository.save(newBook);
     }
 
@@ -92,6 +93,11 @@ public class ApiBookService {
             .categoryName(category.getCategoryName())
             .locationCode(location)
             .build();
+    }
+
+    private Book findBookById ( Long bookId ) {
+        return bookRepository.findById(bookId)
+            .orElseThrow(() -> new BookNotFoundException(bookId));
     }
 
     private Category findCategoryById ( Long categoryId ) {

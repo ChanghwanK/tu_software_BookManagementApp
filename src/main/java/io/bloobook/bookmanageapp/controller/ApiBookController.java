@@ -32,38 +32,39 @@ public class ApiBookController {
     private final ApiBookService bookService;
 
     @PostMapping ("")
-    public ResponseEntity<Void> saveNewBook ( @RequestBody @Valid BookSaveRequest bookSaveRequest ) {
+    public ResponseEntity<Void> saveNewBook (
+        @RequestBody @Valid BookSaveRequest bookSaveRequest ) {
 
         log.info("Book Save Request >> {}", bookSaveRequest);
-        bookService.saveNeBook(bookSaveRequest);
+        bookService.saveNewBook(bookSaveRequest);
         return ResponseEntity.created(URI.create("/api/books")).build();
     }
 
     @GetMapping ("/{id}")
     public ResponseEntity<BookDetailResponse> findBookById ( @PathVariable Long id ) {
         log.info("Book Id: {} ", id);
-        return ResponseEntity.ok().body(bookService.findBookById(id));
+        return ResponseEntity.ok().body(bookService.findBookDetailById(id));
     }
 
     @GetMapping ("/search/{title}")
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle (
+        @PathVariable String title ) {
         log.info("Book Title: {}", title);
         return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
 
     @GetMapping ("/search/category/{categoryId}")
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId (
+        @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
     }
-    /**
-     * [ 메모 ]
-     * 작가의 요청으로 인한 도서 제목, 소개글, 썸네일 이미지 수정을 지원합니다.
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateBookInfo (@PathVariable BookUpdateRequest updateRequest ) {
+
+    @PutMapping ("/{id}")
+    public ResponseEntity<Void> updateBookInfo ( @PathVariable Long id,
+        @RequestBody BookUpdateRequest updateRequest ) {
         log.info("Update Request Info {}", updateRequest);
-        bookService.updateBookInfo(updateRequest);
+        bookService.updateBookInfo(id, updateRequest);
         return ResponseEntity.ok().build();
     }
 }

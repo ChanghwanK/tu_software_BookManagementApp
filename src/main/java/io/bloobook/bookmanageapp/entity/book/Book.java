@@ -1,5 +1,6 @@
 package io.bloobook.bookmanageapp.entity.book;
 
+import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
@@ -78,10 +79,9 @@ public class Book extends BaseTimeEntity {
     @Column (nullable = false)
     private LocalDate publicationAt;                     // 초판 발행일
 
-
+    @JoinColumn (name = "retal_id")
     @ManyToOne (fetch = FetchType.LAZY)
     private Rental rental;
-
 
     @JoinColumn (name = "publisher_id")
     @ManyToOne (fetch = FetchType.LAZY)
@@ -106,8 +106,10 @@ public class Book extends BaseTimeEntity {
     private Category category;
 
     @Builder
-    public Book ( Long id, @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author,
-        @NonNull String thumbnail, @NonNull LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, Category category ) {
+    public Book ( Long id, @NonNull String bookCode, @NonNull String title,
+        @NonNull String bookIntroduction, @NonNull String author,
+        @NonNull String thumbnail, @NonNull LocalDate publicationAt, Publisher publisher,
+        BookLocation bookLocation, Category category ) {
         this.id = id;
         this.bookCode = bookCode;
         this.title = title;
@@ -135,9 +137,17 @@ public class Book extends BaseTimeEntity {
         this.rental = null;
     }
 
+    public Book updateBook ( BookUpdateRequest updateRequest ) {
+        this.title = updateRequest.getTitle();
+        this.bookIntroduction = updateRequest.getBookIntroduction();
+        this.thumbnail = updateRequest.getThumbnailUrl();
+        return this;
+    }
+
     public void increaseStockCount ( int stockCount ) {
         this.stockCount = stockCount;
     }
+
     public void increaseTotalRentalCount () {
         this.totalRentalCount += 1;
     }
