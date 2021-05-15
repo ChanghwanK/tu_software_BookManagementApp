@@ -46,14 +46,13 @@ public class ApiBookController {
     @GetMapping ("/search/{title}")
     public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
         log.info("Book Title: {}", title);
-        return ResponseEntity.ok().body( bookService.findBooksByTitle (title) );
+        return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
 
-    @GetMapping ("/search/{categoryId}")
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId (@PathVariable Long categoryId) {
+    // TODO: 2021.05.15 -Blue    -- Test 코드 작성하기
+    @GetMapping ("/search/category/{categoryId}")
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
-        // TODO: 2021.05.15 -Blue
-        // Service 및 나머지 로직 구현하기
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
     }
 }
