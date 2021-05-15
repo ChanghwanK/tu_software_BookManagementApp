@@ -1,6 +1,9 @@
 package io.bloobook.bookmanageapp.common.dto.request;
 
 import io.bloobook.bookmanageapp.entity.book.Book;
+import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
+import io.bloobook.bookmanageapp.entity.category.Category;
+import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,14 +35,17 @@ public class BookSaveRequest {
     private String publisherBusinessNumber;
     private LocalDate publicationAt;
 
-    public Book toBaseBookEntity () {
-        return Book.builder ()
-            .title ( title )
-            .bookCode ( bookCode )
-            .bookIntroduction ( bookIntroduction )
-            .author ( author )
-            .thumbnail ( thumbnail )
-            .publicationAt ( publicationAt )
-            .build ();
+    public Book createNewBook ( Category category, Publisher publisher, BookLocation bookLocation ) {
+        return Book.builder()
+            .bookCode(bookCode)
+            .title(title)
+            .bookIntroduction(bookIntroduction)
+            .author(author)
+            .thumbnail(thumbnail)
+            .publicationAt(publicationAt)
+            .category(category)
+            .publisher(publisher)
+            .bookLocation(bookLocation)
+            .build();
     }
 }

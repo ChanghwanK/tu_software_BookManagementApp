@@ -120,6 +120,9 @@ class ApiBookControllerTest {
             .author(bookSaveRequest.getAuthor())
             .thumbnail(bookSaveRequest.getThumbnail())
             .publicationAt(bookSaveRequest.getPublicationAt())
+            .category(category)
+            .publisher(publisher)
+            .bookLocation(bookLocation)
             .build();
 
         testBook = Book.builder()
@@ -129,15 +132,11 @@ class ApiBookControllerTest {
             .bookIntroduction("자바를 정복합시다.")
             .author("Martin")
             .thumbnail("www.naver.com")
+            .publicationAt(bookSaveRequest.getPublicationAt())
+            .category(category)
+            .publisher(publisher)
+            .bookLocation(bookLocation)
             .build();
-
-        baseBook.setBookLocation(bookLocation);
-        baseBook.setRelationWithCategory(category);
-        baseBook.setRelationWithPublisher(publisher);
-
-        testBook.setRelationWithPublisher(publisher);
-        testBook.setRelationWithCategory(category);
-        testBook.setBookLocation(bookLocation);
     }
 
     @DisplayName ("신규 도서 등록을 테스트 한다.")

@@ -97,18 +97,8 @@ class ApiBookServiceTest {
             .publisherStatus(PublisherStatus.REGISTER)
             .build();
 
-        baseBook = bookSaveRequest.toBaseBookEntity();
-        testBook = bookSaveRequest.toBaseBookEntity();
-
-        baseBook.setBookLocation(bookLocation);
-        baseBook.setRelationWithCategory(category);
-        baseBook.setRelationWithPublisher(publisher);
-
-        testBook.setBookLocation(bookLocation);
-        testBook.setRelationWithCategory(category);
-        testBook.setRelationWithPublisher(publisher);
-
-
+        baseBook = bookSaveRequest.createNewBook(category, publisher, bookLocation);
+        testBook = bookSaveRequest.createNewBook(category, publisher, bookLocation);
     }
 
     @DisplayName ("도서 저장 서비스 테스트")
@@ -133,7 +123,6 @@ class ApiBookServiceTest {
     void findBookById () {
         // given
         // when
-        // 안되면 진짜 Book 을 만들어서 해보자
         when(bookRepository.findByIdJoinFetch(anyLong()))
             .thenReturn(Optional.of(baseBook));
         // then

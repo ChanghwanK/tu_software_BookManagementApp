@@ -1,6 +1,5 @@
 package io.bloobook.bookmanageapp.entity.book;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
@@ -18,8 +17,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ import lombok.ToString;
 
 
 @ToString (exclude = { "publisher", "bookLocation", "rental", "category", "bestBook" })
-@NoArgsConstructor
+@NoArgsConstructor (access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class Book extends BaseTimeEntity {
@@ -77,58 +78,49 @@ public class Book extends BaseTimeEntity {
     @Column (nullable = false)
     private LocalDate publicationAt;                     // 초판 발행일
 
-    @JsonIgnore
+
     @ManyToOne (fetch = FetchType.LAZY)
     private Rental rental;
 
-    @JsonIgnore
+
+    @JoinColumn (name = "publisher_id")
     @ManyToOne (fetch = FetchType.LAZY)
     private Publisher publisher;
 
-    @JsonIgnore
+
     @OneToOne (
         fetch = FetchType.LAZY,
-        cascade = CascadeType.PERSIST)
+        cascade = CascadeType.ALL)
     private BookLocation bookLocation;
 
-    @JsonIgnore
+
     @OneToOne (
         fetch = FetchType.LAZY,
-        cascade = CascadeType.REMOVE,
+        cascade = CascadeType.ALL,
         orphanRemoval = true)
     private BestBook bestBook;
 
-    @JsonIgnore
+
+    @JoinColumn (name = "category_id")
     @ManyToOne (fetch = FetchType.LAZY)
     private Category category;
 
     @Builder
-    public Book ( Long id, @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author, @NonNull String thumbnail, LocalDate publicationAt) {
+    public Book ( Long id, @NonNull String bookCode, @NonNull String title, @NonNull String bookIntroduction, @NonNull String author,
+        @NonNull String thumbnail, @NonNull LocalDate publicationAt, Publisher publisher, BookLocation bookLocation, Category category ) {
         this.id = id;
         this.bookCode = bookCode;
         this.title = title;
         this.bookIntroduction = bookIntroduction;
         this.author = author;
         this.thumbnail = thumbnail;
-        this.stockCount = 0;
+        this.stockCount = 5;
         this.totalRentalCount = 0;
         this.bookStatus = BookStatus.REGISTER;
         this.publicationAt = publicationAt;
-    }
-
-    public void setRelationWithPublisher ( Publisher publisher ) {
-        if ( publisher != null ) {
-            this.publisher = publisher;
-        }
-    }
-
-    public void setBookLocation ( BookLocation bookLocation ) {
+        this.publisher = publisher;
         this.bookLocation = bookLocation;
-    }
-
-    public void setRelationWithCategory ( Category category ) {
         this.category = category;
-        category.addBook(this);
     }
 
     public void addRentalInfo ( Rental rental ) {
@@ -146,7 +138,6 @@ public class Book extends BaseTimeEntity {
     public void increaseStockCount ( int stockCount ) {
         this.stockCount = stockCount;
     }
-
     public void increaseTotalRentalCount () {
         this.totalRentalCount += 1;
     }

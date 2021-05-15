@@ -36,21 +36,15 @@ public class ApiBookService {
     private final PublisherRepository publisherRepository;
 
     @Transactional
-    public Book saveNeBook ( BookSaveRequest bookSaveRequest ) {
-        isDuplicatedBook(bookSaveRequest.getBookCode());
+    public Book saveNeBook ( BookSaveRequest saveRequest ) {
+        isDuplicatedBook(saveRequest.getBookCode());
+        Category category = findCategoryById(saveRequest.getCategoryId());
 
-        Book baseBook = bookSaveRequest.toBaseBookEntity();
-
-        Category category = findCategoryById(bookSaveRequest.getCategoryId());
-
-        Publisher publisher = findPublisherByBusinessNumber(
-            bookSaveRequest.getPublisherBusinessNumber());
-
-        BookLocation bookLocation = createLocation(category,
-            bookSaveRequest.getLocationCode());
-
-        return bookRepository
-            .save(createBookRelationOf(baseBook, category, bookLocation, publisher));
+        return saveNewBook(
+            saveRequest, category,
+            findPublisherByBusinessNumber(saveRequest.getPublisherBusinessNumber()),
+            createLocation(category, saveRequest.getLocationCode())
+        );
     }
 
     @Transactional (readOnly = true)
@@ -81,22 +75,16 @@ public class ApiBookService {
         // 도서정보 수정 서비스 레이어 구현하기
     }
 
-    /**
-     * 해당 인자들과 baseBook 과의 연관관계를 설정한다.
-     */
-    private Book createBookRelationOf ( Book baseBook, Category category, BookLocation bookLocation,
-        Publisher publisher ) {
-        baseBook.setRelationWithPublisher(publisher);
-        baseBook.setRelationWithCategory(category);
-        baseBook.setBookLocation(bookLocation);
-        baseBook.increaseStockCount(5);
-        return baseBook;
-    }
 
     private void isDuplicatedBook ( String bookCode ) {
         if ( bookRepository.findByBookCode(bookCode).isPresent() ) {
             throw new AlreadyExistBookException(bookCode);
         }
+    }
+
+    private Book saveNewBook ( BookSaveRequest request, Category category, Publisher publisher, BookLocation bookLocation ) {
+        Book newBook = request.createNewBook(category,publisher,bookLocation);
+        return bookRepository.save(newBook);
     }
 
     private BookLocation createLocation ( Category category, String location ) {
