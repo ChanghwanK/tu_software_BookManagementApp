@@ -13,14 +13,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query (value =
         "select distinct b "
-        + "from Book b "
-        + "join fetch b.category "
-        + "join fetch b.publisher "
-        + "join fetch b.bookLocation "
-        + "where b.id =:id" )
-    Optional<Book> findByIdJoinFetch( Long id );
+            + "from Book b "
+            + "join fetch b.category "
+            + "join fetch b.publisher "
+            + "join fetch b.bookLocation "
+            + "where b.id =:id")
+    Optional<Book> findByIdJoinFetch ( Long id );
 
-    List<Book> findByTitleContaining (String title);
+    List<Book> findByTitleContaining ( String title );
+
+    List<Book> findAllByCategoryId ( Long id );
 
     Optional<Book> findByBookCode ( String bookCode );
 }

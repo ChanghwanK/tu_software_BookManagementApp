@@ -68,6 +68,12 @@ public class ApiBookService {
         return Collections.unmodifiableList(BookSimpleResponse.listOf(books));
     }
 
+    @Transactional (readOnly = true)
+    public List<BookSimpleResponse> findAllByCategoryId ( Long categoryId ) {
+        List<Book> books = bookRepository.findAllByCategoryId(categoryId);
+        return BookSimpleResponse.listOf(books);
+    }
+
     /**
      * 해당 인자들과 baseBook 과의 연관관계를 설정한다.
      */
@@ -102,5 +108,4 @@ public class ApiBookService {
         return publisherRepository.findByBusinessNumber(businessNumber)
             .orElseThrow(() -> new PublisherNotFoundException(businessNumber));
     }
-
 }

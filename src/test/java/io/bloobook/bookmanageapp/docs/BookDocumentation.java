@@ -54,27 +54,45 @@ public class BookDocumentation {
                 fieldWithPath("stockCount").type(JsonFieldType.NUMBER).description("도서 재고 수량"),
                 fieldWithPath("publicationAt").type(JsonFieldType.STRING).description("도서 출판일"),
                 fieldWithPath("publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
-                fieldWithPath("publisherTelNumber").type(JsonFieldType.STRING).description("출판사 대표번호"),
+                fieldWithPath("publisherTelNumber").type(JsonFieldType.STRING)
+                    .description("출판사 대표번호"),
                 fieldWithPath("categoryName").type(JsonFieldType.STRING).description("카테고리 명"),
                 fieldWithPath("bookLocation").type(JsonFieldType.STRING).description("도서 위치")
             )
         );
     }
 
-    public static ResultHandler findBookByTitle() {
+    public static ResultHandler findBookByTitle () {
         return document("books/findByTitle",
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                pathParameters(
-                    parameterWithName("title").description("도서 제목")
-                ),
-                responseFields(
-                    fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 Id"),
-                    fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 코드"),
-                    fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 코드"),
-                    fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("도서 코드"),
-                    fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING).description("도서 코드")
-                )
-            );
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("title").description("도서 제목")
+            ),
+            responseFields(
+                fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 Id"),
+                fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
+                fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 작가"),
+                fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 명"),
+                fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 URL")
+            )
+        );
+    }
+
+    public static ResultHandler findAllByCategoryId () {
+        return document("books/findAllByCategoryId",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("categoryId").description("카테고리 ID")
+            ),
+            responseFields(
+                fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 Id"),
+                fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
+                fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 작가"),
+                fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 명"),
+                fieldWithPath("[].thumbnailUrl").type(JsonFieldType.STRING).description("썸네일 URL")
+            )
+        );
     }
 }
