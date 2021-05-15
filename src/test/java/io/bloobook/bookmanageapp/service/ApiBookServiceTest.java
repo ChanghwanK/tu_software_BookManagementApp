@@ -62,6 +62,7 @@ class ApiBookServiceTest {
     private Publisher publisher;
     private BookLocation bookLocation;
     private Book baseBook;
+    private Book testBook;
 
     @BeforeEach
     void setUp () {
@@ -97,9 +98,17 @@ class ApiBookServiceTest {
             .build();
 
         baseBook = bookSaveRequest.toBaseBookEntity();
+        testBook = bookSaveRequest.toBaseBookEntity();
+
         baseBook.setBookLocation(bookLocation);
         baseBook.setRelationWithCategory(category);
         baseBook.setRelationWithPublisher(publisher);
+
+        testBook.setBookLocation(bookLocation);
+        testBook.setRelationWithCategory(category);
+        testBook.setRelationWithPublisher(publisher);
+
+
     }
 
     @DisplayName ("도서 저장 서비스 테스트")
@@ -144,17 +153,32 @@ class ApiBookServiceTest {
     @Test
     void findBooksByTitle () {
         // given
-        Book testBook = bookSaveRequest.toBaseBookEntity();
-        testBook.setBookLocation(bookLocation);
-        testBook.setRelationWithCategory(category);
-        testBook.setRelationWithPublisher(publisher);
-
         // when
         when(bookRepository.findByTitleContaining(anyString()))
             .thenReturn(List.of(baseBook, testBook));
         // then
 
         List<BookSimpleResponse> bookSimpleResponses = bookService.findBooksByTitle(anyString());
+        assertAll (
+            () -> assertThat(bookSimpleResponses.size()).isEqualTo(2),
+            () -> assertThat(bookSimpleResponses.get(0).getTitle()).isEqualTo(baseBook.getTitle()),
+            () -> assertThat(bookSimpleResponses.get(0).getAuthor()).isEqualTo(baseBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(0).getThumbnailUrl()).isEqualTo(baseBook.getThumbnail()),
+            () -> assertThat(bookSimpleResponses.get(1).getTitle()).isEqualTo(testBook.getTitle()),
+            () -> assertThat(bookSimpleResponses.get(1).getAuthor()).isEqualTo(testBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(1).getThumbnailUrl()).isEqualTo(testBook.getThumbnail())
+        );
+    }
+
+    @DisplayName ("카테고리 별 도서 목록 조회를 테스트")
+    @Test
+    void findBooksByCategoryId () {
+        // given
+        // when
+        when(bookRepository.findAllByCategoryId(anyLong()))
+            .thenReturn(List.of(baseBook, testBook));
+        // then
+        List<BookSimpleResponse> bookSimpleResponses = bookService.findAllByCategoryId(anyLong());
         assertAll (
             () -> assertThat(bookSimpleResponses.size()).isEqualTo(2),
             () -> assertThat(bookSimpleResponses.get(0).getTitle()).isEqualTo(baseBook.getTitle()),

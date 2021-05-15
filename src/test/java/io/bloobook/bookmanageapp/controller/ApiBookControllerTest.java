@@ -70,6 +70,7 @@ class ApiBookControllerTest {
     private Publisher publisher;
     private BookLocation bookLocation;
     private Book baseBook;
+    private Book testBook;
 
     @BeforeEach
     void setUp ( WebApplicationContext webApplicationContext, RestDocumentationContextProvider provider ) {
@@ -121,9 +122,22 @@ class ApiBookControllerTest {
             .publicationAt(bookSaveRequest.getPublicationAt())
             .build();
 
+        testBook = Book.builder()
+            .id(2L)
+            .bookCode("B-2948")
+            .title("자바 도서관")
+            .bookIntroduction("자바를 정복합시다.")
+            .author("Martin")
+            .thumbnail("www.naver.com")
+            .build();
+
         baseBook.setBookLocation(bookLocation);
         baseBook.setRelationWithCategory(category);
         baseBook.setRelationWithPublisher(publisher);
+
+        testBook.setRelationWithPublisher(publisher);
+        testBook.setRelationWithCategory(category);
+        testBook.setBookLocation(bookLocation);
     }
 
     @DisplayName ("신규 도서 등록을 테스트 한다.")
@@ -162,22 +176,8 @@ class ApiBookControllerTest {
 
     @DisplayName ("제목을 통한 도서 리스트 조회 테스트")
     @Test
-    void findBooksByTitle () throws Exception {
+    void findAllByTitle () throws Exception {
         // given
-        Book testBook = Book.builder()
-            .id(2L)
-            .bookCode("B-2948")
-            .title("자바 도서관")
-            .bookIntroduction("자바를 정복합시다.")
-            .author("Martin")
-            .thumbnail("www.naver.com")
-            .build();
-
-        testBook.setRelationWithPublisher(publisher);
-        testBook.setRelationWithCategory(category);
-        testBook.setBookLocation(bookLocation);
-
-
         // when
         when(bookService.findBooksByTitle(anyString()))
             .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
@@ -188,6 +188,24 @@ class ApiBookControllerTest {
             .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
             .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
             .andDo(BookDocumentation.findBookByTitle());
+    }
+
+    @DisplayName ("카테고리 Id 를 통한 도서 목록 조회 테스트")
+    @Test
+    void findAllByCategoryIdx () throws Exception {
+        when(bookService.findAllByCategoryId(anyLong()))
+            .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
+
+        // then
+        mockMvc.perform(get("/api/books/search/category/{categoryId}",1L))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
+            .andExpect(jsonPath("$.[0].author").value(baseBook.getAuthor()))
+            .andExpect(jsonPath("$.[0].publisherName").value(baseBook.getPublisher().getName()))
+            .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
+            .andExpect(jsonPath("$.[1].author").value(testBook.getAuthor()))
+            .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
+            .andDo(BookDocumentation.findAllByCategoryId());
     }
 
     @DisplayName ("잘못된 Id에 대한 예외 테스트")

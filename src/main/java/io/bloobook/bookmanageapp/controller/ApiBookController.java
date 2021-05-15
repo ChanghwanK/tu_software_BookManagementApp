@@ -37,9 +37,6 @@ public class ApiBookController {
         return ResponseEntity.created(URI.create("/api/books")).build();
     }
 
-    /**
-     * [ 설명 ] - 해당 메서드를 통해서는 단순히 도서 상세 정보만 조회 합니다. - 대여 정보는 RentalController 를 통해서 조회 합니다.
-     */
     @GetMapping ("/{id}")
     public ResponseEntity<BookDetailResponse> findBookById ( @PathVariable Long id ) {
         log.info("Book Id: {} ", id);
@@ -49,6 +46,13 @@ public class ApiBookController {
     @GetMapping ("/search/{title}")
     public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
         log.info("Book Title: {}", title);
-        return ResponseEntity.ok().body( bookService.findBooksByTitle (title) );
+        return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
+    }
+
+    // TODO: 2021.05.15 -Blue    -- Test 코드 작성하기
+    @GetMapping ("/search/category/{categoryId}")
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
+        log.info("Category Id: {}", categoryId);
+        return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
     }
 }
