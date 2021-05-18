@@ -54,15 +54,13 @@ public class ApiBookController {
     }
 
     @GetMapping ("/search/category/{categoryId}")
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId (
-        @PathVariable Long categoryId ) {
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Void> updateBookInfo ( @PathVariable Long id,
-        @RequestBody BookUpdateRequest updateRequest ) {
+    public ResponseEntity<Void> updateBookInfo ( @PathVariable Long id, @RequestBody BookUpdateRequest updateRequest ) {
         log.info("Update Request Info {}", updateRequest);
         bookService.updateBookInfo(id, updateRequest);
         return ResponseEntity.ok().build();
