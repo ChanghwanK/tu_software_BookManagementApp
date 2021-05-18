@@ -38,7 +38,7 @@
 <br>
 <br>
 
-## Usecase
+## 🚀 Usecase
 👋🏻 [유스케이스](https://github.com/DevBloo/tu_software_BookManagementApp/wiki/Usecase) 
 
 <br>
