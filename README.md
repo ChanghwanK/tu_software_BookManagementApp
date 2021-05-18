@@ -38,6 +38,13 @@
 <br>
 <br>
 
+## Usecase
+👋🏻 [유스케이스](https://github.com/DevBloo/tu_software_BookManagementApp/wiki/Usecase) 
+
+<br>
+<br>
+<br>
+
 ## 🏃🏻 Sprint
 
 Sprint 는 Notion 과 Project 에서 확인 할 수 있습니다.
