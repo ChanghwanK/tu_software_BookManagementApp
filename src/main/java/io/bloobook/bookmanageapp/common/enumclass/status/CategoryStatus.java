@@ -12,9 +12,8 @@ import lombok.Getter;
 @Getter
 public enum CategoryStatus {
 
-    REGISTER (1, "카테고리 운영 상태"),
-    UNREGISTER (2, "카테고리 미운영 상태")
-    ;
+    REGISTER(1, "카테고리 운영 상태"),
+    UNREGISTER(2, "카테고리 미운영 상태");
 
     private final int id;
     private final String description;

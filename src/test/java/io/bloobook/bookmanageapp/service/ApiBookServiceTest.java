@@ -11,11 +11,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
+import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
@@ -58,6 +60,7 @@ class ApiBookServiceTest {
     private PublisherRepository publisherRepository;
 
     private BookSaveRequest bookSaveRequest;
+    private BookUpdateRequest updateRequest;
     private Category category;
     private Publisher publisher;
     private BookLocation bookLocation;
@@ -76,6 +79,12 @@ class ApiBookServiceTest {
             .thumbnail("www.google.com")
             .publisherBusinessNumber("2309-A3933-2222")
             .publicationAt(LocalDate.of(2015, 4, 23))
+            .build();
+
+        updateRequest = BookUpdateRequest.builder()
+            .title("도서 정보 수정 테스트 입니다.")
+            .bookIntroduction("도서 소개글 수정 테스트 입니다.")
+            .thumbnailUrl("썸네일 URL 수정 테스트 입니다.")
             .build();
 
         bookLocation = BookLocation.builder()
@@ -112,7 +121,7 @@ class ApiBookServiceTest {
         when(publisherRepository.findByBusinessNumber(anyString()))
             .thenReturn(Optional.of(publisher));
 
-        bookService.saveNeBook(bookSaveRequest);
+        Book newBook = bookService.saveNewBook(bookSaveRequest);
 
         // then
         verify(bookRepository, times(1)).save(any());
@@ -126,15 +135,18 @@ class ApiBookServiceTest {
         when(bookRepository.findByIdJoinFetch(anyLong()))
             .thenReturn(Optional.of(baseBook));
         // then
-        BookDetailResponse bookDetailResponse = bookService.findBookById(anyLong());
+        BookDetailResponse bookDetailResponse = bookService.findBookDetailById(anyLong());
 
         assertAll(
             () -> assertThat(bookDetailResponse.getBookCode()).isEqualTo(baseBook.getBookCode()),
             () -> assertThat(bookDetailResponse.getTitle()).isEqualTo(baseBook.getTitle()),
-            () -> assertThat(bookDetailResponse.getBookIntroduction()).isEqualTo(baseBook.getBookIntroduction()),
+            () -> assertThat(bookDetailResponse.getBookIntroduction())
+                .isEqualTo(baseBook.getBookIntroduction()),
             () -> assertThat(bookDetailResponse.getPublisherName()).isEqualTo(publisher.getName()),
-            () -> assertThat(bookDetailResponse.getPublisherTelNumber()).isEqualTo(publisher.getTelNumber()),
-            () -> assertThat(bookDetailResponse.getBookLocation()).isEqualTo(bookLocation.getLocationInfo())
+            () -> assertThat(bookDetailResponse.getPublisherTelNumber())
+                .isEqualTo(publisher.getTelNumber()),
+            () -> assertThat(bookDetailResponse.getBookLocation())
+                .isEqualTo(bookLocation.getLocationInfo())
         );
     }
 
@@ -148,14 +160,18 @@ class ApiBookServiceTest {
         // then
 
         List<BookSimpleResponse> bookSimpleResponses = bookService.findBooksByTitle(anyString());
-        assertAll (
+        assertAll(
             () -> assertThat(bookSimpleResponses.size()).isEqualTo(2),
             () -> assertThat(bookSimpleResponses.get(0).getTitle()).isEqualTo(baseBook.getTitle()),
-            () -> assertThat(bookSimpleResponses.get(0).getAuthor()).isEqualTo(baseBook.getAuthor()),
-            () -> assertThat(bookSimpleResponses.get(0).getThumbnailUrl()).isEqualTo(baseBook.getThumbnail()),
+            () -> assertThat(bookSimpleResponses.get(0).getAuthor())
+                .isEqualTo(baseBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(0).getThumbnailUrl())
+                .isEqualTo(baseBook.getThumbnail()),
             () -> assertThat(bookSimpleResponses.get(1).getTitle()).isEqualTo(testBook.getTitle()),
-            () -> assertThat(bookSimpleResponses.get(1).getAuthor()).isEqualTo(testBook.getAuthor()),
-            () -> assertThat(bookSimpleResponses.get(1).getThumbnailUrl()).isEqualTo(testBook.getThumbnail())
+            () -> assertThat(bookSimpleResponses.get(1).getAuthor())
+                .isEqualTo(testBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(1).getThumbnailUrl())
+                .isEqualTo(testBook.getThumbnail())
         );
     }
 
@@ -168,14 +184,35 @@ class ApiBookServiceTest {
             .thenReturn(List.of(baseBook, testBook));
         // then
         List<BookSimpleResponse> bookSimpleResponses = bookService.findAllByCategoryId(anyLong());
-        assertAll (
+        assertAll(
             () -> assertThat(bookSimpleResponses.size()).isEqualTo(2),
             () -> assertThat(bookSimpleResponses.get(0).getTitle()).isEqualTo(baseBook.getTitle()),
-            () -> assertThat(bookSimpleResponses.get(0).getAuthor()).isEqualTo(baseBook.getAuthor()),
-            () -> assertThat(bookSimpleResponses.get(0).getThumbnailUrl()).isEqualTo(baseBook.getThumbnail()),
+            () -> assertThat(bookSimpleResponses.get(0).getAuthor())
+                .isEqualTo(baseBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(0).getThumbnailUrl())
+                .isEqualTo(baseBook.getThumbnail()),
             () -> assertThat(bookSimpleResponses.get(1).getTitle()).isEqualTo(testBook.getTitle()),
-            () -> assertThat(bookSimpleResponses.get(1).getAuthor()).isEqualTo(testBook.getAuthor()),
-            () -> assertThat(bookSimpleResponses.get(1).getThumbnailUrl()).isEqualTo(testBook.getThumbnail())
+            () -> assertThat(bookSimpleResponses.get(1).getAuthor())
+                .isEqualTo(testBook.getAuthor()),
+            () -> assertThat(bookSimpleResponses.get(1).getThumbnailUrl())
+                .isEqualTo(testBook.getThumbnail())
+        );
+    }
+
+    @DisplayName ("도서 정보 수정 테스트")
+    @Test
+    void updateBook () {
+        // given
+        // when
+        when(bookRepository.findById(anyLong()))
+            .thenReturn(Optional.of(baseBook));
+
+        Book updateBook = bookService.updateBookInfo(anyLong(), updateRequest);
+        // then
+        assertAll(
+            () -> assertThat(updateBook.getTitle()).isEqualTo(updateRequest.getTitle()),
+            () -> assertThat(updateBook.getBookIntroduction()).isEqualTo(updateRequest.getBookIntroduction()),
+            () -> assertThat(updateBook.getThumbnail()).isEqualTo(updateBook.getThumbnail())
         );
     }
 
@@ -189,8 +226,22 @@ class ApiBookServiceTest {
 
         // then
         assertThrows(
-            AlreadyExistBookException.class, () -> bookService.saveNeBook(bookSaveRequest)
+            AlreadyExistBookException.class, () -> bookService.saveNewBook(bookSaveRequest)
         );
+    }
+
+    @DisplayName ("잘못된 도서 Id에 대한 예외 테스트")
+    @Test
+    void ifBookNotFound () {
+        // given
+        // when
+        when(bookRepository.findById(anyLong()))
+            .thenReturn(Optional.empty());
+        // then
+        assertThrows(
+            BookNotFoundException.class, () -> bookService.updateBookInfo(anyLong(), updateRequest)
+        );
+
     }
 
     @DisplayName ("출판사 사업자 번호가 잘못된 예외 테스트")
@@ -206,7 +257,7 @@ class ApiBookServiceTest {
 
         // then
         assertThrows(
-            PublisherNotFoundException.class, () -> bookService.saveNeBook(bookSaveRequest)
+            PublisherNotFoundException.class, () -> bookService.saveNewBook(bookSaveRequest)
         );
     }
 
@@ -220,7 +271,7 @@ class ApiBookServiceTest {
 
         // then
         assertThrows(
-            CategoryNotFoundException.class, () -> bookService.saveNeBook(bookSaveRequest)
+            CategoryNotFoundException.class, () -> bookService.saveNewBook(bookSaveRequest)
         );
     }
 }

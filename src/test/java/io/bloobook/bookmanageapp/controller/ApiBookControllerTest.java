@@ -6,12 +6,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
+import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
@@ -73,7 +75,8 @@ class ApiBookControllerTest {
     private Book testBook;
 
     @BeforeEach
-    void setUp ( WebApplicationContext webApplicationContext, RestDocumentationContextProvider provider ) {
+    void setUp ( WebApplicationContext webApplicationContext,
+        RestDocumentationContextProvider provider ) {
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .addFilter(new CharacterEncodingFilter("UTF-8"))
@@ -158,7 +161,7 @@ class ApiBookControllerTest {
         // given
         BookDetailResponse bookDetailResponse = BookDetailResponse.of(baseBook);
         // when
-        when(bookService.findBookById(anyLong()))
+        when(bookService.findBookDetailById(anyLong()))
             .thenReturn(bookDetailResponse);
 
         // then
@@ -182,7 +185,7 @@ class ApiBookControllerTest {
             .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
 
         // then
-        mockMvc.perform(get("/api/books/search/{title}","Java"))
+        mockMvc.perform(get("/api/books/search/{title}", "Java"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
             .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
@@ -196,7 +199,7 @@ class ApiBookControllerTest {
             .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
 
         // then
-        mockMvc.perform(get("/api/books/search/category/{categoryId}",1L))
+        mockMvc.perform(get("/api/books/search/category/{categoryId}", 1L))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
             .andExpect(jsonPath("$.[0].author").value(baseBook.getAuthor()))
@@ -207,12 +210,32 @@ class ApiBookControllerTest {
             .andDo(BookDocumentation.findAllByCategoryId());
     }
 
-    @DisplayName ("잘못된 Id에 대한 예외 테스트")
+    @DisplayName ("도서정보 수정을 테스트")
+    @Test
+    void bookUpdateTest () throws Exception {
+        // give
+        BookUpdateRequest updateRequest = BookUpdateRequest.builder()
+            .title("제목 수정 테스트 입니다")
+            .bookIntroduction("도서 소개글 수정 입니다.")
+            .thumbnailUrl("update image test")
+            .build();
+
+        // when
+        // then
+        mockMvc.perform(put("/api/books/{id}",1L)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateRequest))
+        )
+            .andExpect(status().isOk())
+            .andDo(BookDocumentation.updateBookInfo());
+    }
+
+    @DisplayName ("잘못된 도서 Id에 대한 예외 테스트")
     @Test
     void ifBookNotFound () throws Exception {
         // given
         // when
-        when(bookService.findBookById(anyLong()))
+        when(bookService.findBookDetailById(anyLong()))
             .thenThrow(new BookNotFoundException(12L));
 
         // then

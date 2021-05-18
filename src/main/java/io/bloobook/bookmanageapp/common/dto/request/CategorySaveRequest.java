@@ -14,7 +14,7 @@ import lombok.ToString;
  */
 
 @ToString
-@NoArgsConstructor ( access = AccessLevel.PRIVATE )
+@NoArgsConstructor (access = AccessLevel.PRIVATE)
 @Getter
 public class CategorySaveRequest {
 
@@ -27,11 +27,11 @@ public class CategorySaveRequest {
         this.categoryName = categoryName;
     }
 
-    public Category toEntity() {
-        return Category.builder ()
-            .categoryCode ( categoryCode )
-            .categoryName ( categoryName )
-            .categoryStatus ( CategoryStatus.REGISTER )
-            .build ();
+    public Category toEntity () {
+        return Category.builder()
+            .categoryCode(categoryCode)
+            .categoryName(categoryName)
+            .categoryStatus(CategoryStatus.REGISTER)
+            .build();
     }
 }

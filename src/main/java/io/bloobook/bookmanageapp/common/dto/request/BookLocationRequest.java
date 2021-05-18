@@ -22,9 +22,9 @@ public class BookLocationRequest {
     private String locationCode;
 
     public BookLocation toEntity () {
-        return BookLocation.builder ()
-            .categoryName ( categoryName )
-            .locationCode ( locationCode )
-            .build ();
+        return BookLocation.builder()
+            .categoryName(categoryName)
+            .locationCode(locationCode)
+            .build();
     }
 }
