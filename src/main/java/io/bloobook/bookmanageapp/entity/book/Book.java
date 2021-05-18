@@ -7,7 +7,6 @@ import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
-import io.bloobook.bookmanageapp.entity.rental.Rental;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -79,9 +78,6 @@ public class Book extends BaseTimeEntity {
     @Column (nullable = false)
     private LocalDate publicationAt;                     // 초판 발행일
 
-    @JoinColumn (name = "retal_id")
-    @ManyToOne (fetch = FetchType.LAZY)
-    private Rental rental;
 
     @JoinColumn (name = "publisher_id")
     @ManyToOne (fetch = FetchType.LAZY)
@@ -123,18 +119,6 @@ public class Book extends BaseTimeEntity {
         this.publisher = publisher;
         this.bookLocation = bookLocation;
         this.category = category;
-    }
-
-    public void addRentalInfo ( Rental rental ) {
-        if ( this.rental == null ) {
-            this.rental = rental;
-        } else {
-            // TODO: 2021.05.06 -Blue "이미 등록된 대여 정보가 있습니다." 반환
-        }
-    }
-
-    public void removeBookRental () {
-        this.rental = null;
     }
 
     public Book updateBook ( BookUpdateRequest updateRequest ) {
