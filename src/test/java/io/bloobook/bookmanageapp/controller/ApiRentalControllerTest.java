@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
+import io.bloobook.bookmanageapp.docs.RentalDocument;
 import io.bloobook.bookmanageapp.service.ApiRentalService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -71,7 +72,8 @@ class ApiRentalControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(rentalRequest))
         )
-            .andExpect(status().isCreated());
+            .andExpect(status().isCreated())
+            .andDo(RentalDocument.registRental());
 
     }
 }

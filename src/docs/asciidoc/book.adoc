@@ -13,13 +13,16 @@ CreateBy: Changhwan Kim;
 [[overview_http_verbs]]
 == HTTP verbs
 
-해당 API 는 도서 관리를 위한 API 명세서 입니다.
+- 해당 API 는 도서 관리를 위한 API 명세서 입니다.
+
+== 요청 메소드
 
 |===
 | Verb | Usage
 
 | `GET`
 | 조회 요청은 GET Method 를 사용 하세요
+
 
 | `POST`
 | 등록 요청은 POST Method 를 사용 하세요
@@ -52,7 +55,9 @@ CreateBy: Changhwan Kim;
 | 요청 URL 이 잘못된 경우 응답 코드
 |===
 
-== 도서 등록
+== BOOK API
+
+=== 도서 등록
 
 === Request
 
@@ -71,7 +76,7 @@ include::{snippets}/books/save/request-fields.adoc[]
 
 include::{snippets}/books/save/http-response.adoc[]
 
-== 도서 상세 조회
+=== 도서 상세 조회
 
 === Request
 
@@ -86,7 +91,7 @@ include::{snippets}/books/findById/path-parameters.adoc[]
 
 include::{snippets}/books/findById/http-response.adoc[]
 
-== Tilte 을 이용한 도서 목록 조회
+=== Title 을 이용한 도서 목록 조회
 
 === Request
 
@@ -104,7 +109,7 @@ include::{snippets}/books/findByTitle/response-fields.adoc[]
 
 ---
 
-== Category Id 를 이용한 도서 목록 조회
+=== Category Id 를 이용한 도서 목록 조회
 
 === Request
 
@@ -119,7 +124,7 @@ include::{snippets}/books/findAllByCategoryId/http-response.adoc[]
 include::{snippets}/books/findAllByCategoryId/response-fields.adoc[]
 
 
-== 도서 정보 수정
+=== 도서 정보 수정
 
 === Request
 
@@ -130,3 +135,19 @@ include::{snippets}/books/updateBook/request-fields.adoc[]
 === Response
 
 include::{snippets}/books/updateBook/http-response.adoc[]
+
+
+== RENTAL API
+- 도서 대여 서비스 API 입니다.
+
+== 대여 등록
+
+=== Request
+
+include::{snippets}/rental/regist/http-request.adoc[]
+
+include::{snippets}/rental/regist/request-fields.adoc[]
+
+
+=== Response
+include::{snippets}/rental/regist/http-response.adoc[]
