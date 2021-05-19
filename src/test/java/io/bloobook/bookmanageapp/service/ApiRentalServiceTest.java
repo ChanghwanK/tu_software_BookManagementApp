@@ -86,6 +86,4 @@ class ApiRentalServiceTest {
         // then
         verify(rentalRepository, times(1)).save(any());
     }
-
-
 }

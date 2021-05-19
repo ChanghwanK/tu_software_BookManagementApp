@@ -21,7 +21,6 @@ import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.docs.BookDocumentation;
 import io.bloobook.bookmanageapp.entity.book.Book;
-import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
@@ -32,7 +31,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -57,9 +55,6 @@ class ApiBookControllerTest {
 
     @MockBean
     private ApiBookService bookService;
-
-    @Mock
-    private BookRepository bookRepository;
 
     @Autowired
     private MockMvc mockMvc;
