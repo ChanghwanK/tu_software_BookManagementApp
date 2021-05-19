@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
@@ -38,6 +39,7 @@ public class Rental extends BaseTimeEntity {
     @Enumerated (value = EnumType.STRING)
     private RentalStatus rentalStatus;
 
+    @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 
@@ -60,14 +62,6 @@ public class Rental extends BaseTimeEntity {
         this.rentalStatus = RentalStatus.RENTAL;
         this.startAt = LocalDate.now();
         this.expiredAt = LocalDate.now().plusWeeks(2);
-    }
-
-    public void setRelationWithUserForRental ( User user ) {
-        if ( this.user == null ) {
-            this.user = user;
-        } else {
-            // TODO: 2021.05.06 -Blue  '해당 도서에 이미 등록된 사용자 대여정보가 있습니다.'
-        }
     }
 
     public void returnPeriodExtend () {
