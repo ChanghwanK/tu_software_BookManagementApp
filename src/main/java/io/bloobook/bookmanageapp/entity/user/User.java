@@ -2,18 +2,13 @@ package io.bloobook.bookmanageapp.entity.user;
 
 import io.bloobook.bookmanageapp.common.enumclass.status.UserStatus;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
-import io.bloobook.bookmanageapp.entity.rental.Rental;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,27 +46,13 @@ public class User extends BaseTimeEntity {
     @Enumerated (value = EnumType.STRING)
     private UserStatus userStatus;
 
-    @OneToMany (
-        mappedBy = "user",
-        fetch = FetchType.LAZY,
-        orphanRemoval = true
-    )
-    private final List<Rental> rentals = new ArrayList<>();
-
     @Builder
-    public User ( @NonNull String email, @NonNull String password,
-        @NonNull String phoneNumber, int rentalBookCount,
-        UserStatus userStatus ) {
+    public User ( @NonNull String email, @NonNull String password, @NonNull String phoneNumber) {
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.rentalBookCount = rentalBookCount;
-        this.userStatus = userStatus;
-    }
-
-    public void registerRentalInfo ( Rental rental ) {
-        rental.setRelationWithUserForRental(this);
-        rentals.add(rental);
+        this.rentalBookCount = 0;
+        this.userStatus = UserStatus.REGISTER;
     }
 
     /**

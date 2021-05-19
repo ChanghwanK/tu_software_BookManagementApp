@@ -5,19 +5,18 @@ import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.user.User;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -40,40 +39,33 @@ public class Rental extends BaseTimeEntity {
     @Enumerated (value = EnumType.STRING)
     private RentalStatus rentalStatus;
 
+    @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 
-    @OneToMany (
-        mappedBy = "rental",
-        fetch = FetchType.LAZY,
-        orphanRemoval = true
-    )
-    private final Map<Long, Book> books = new HashMap<>();
+    @OneToOne
+    private Book book;
 
+    @NonNull
+    @Column (nullable = false)
+    private LocalDate startAt;
 
     @NonNull
     @Column (nullable = false)
     private LocalDate expiredAt;
 
-    public void setRelationWithUserForRental ( User user ) {
-        if ( this.user == null ) {
-            this.user = user;
-        } else {
-            // TODO: 2021.05.06 -Blue  '해당 도서에 이미 등록된 사용자 대여정보가 있습니다.'
-        }
+    @Builder
+    public Rental ( Long id, User user, Book book ) {
+        this.id = id;
+        this.user = user;
+        this.book = book;
+        this.rentalStatus = RentalStatus.RENTAL;
+        this.startAt = LocalDate.now();
+        this.expiredAt = LocalDate.now().plusWeeks(2);
     }
 
     public void returnPeriodExtend () {
         this.expiredAt.plusWeeks(1);
     }
 
-    public void startBookRental ( Book book ) {
-        book.addRentalInfo(this);
-        books.put(book.getId(), book);
-    }
-
-    public void endBookRental ( Book book ) {
-        book.removeBookRental();
-        books.remove(book.getId(), book);
-    }
 }
