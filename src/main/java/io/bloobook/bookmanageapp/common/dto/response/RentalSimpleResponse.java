@@ -1,8 +1,11 @@
 package io.bloobook.bookmanageapp.common.dto.response;
 
+import io.bloobook.bookmanageapp.entity.rental.Rental;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +14,8 @@ import lombok.NoArgsConstructor;
  * @Date: 2021/05/20
  */
 
+
+@AllArgsConstructor
 @NoArgsConstructor (access = AccessLevel.PRIVATE)
 @Getter
 public class RentalSimpleResponse {
@@ -21,8 +26,23 @@ public class RentalSimpleResponse {
     private LocalDate rentalAt;
     private LocalDate expiredAt;
 
-    public static List<BookSimpleResponse> listOf () {
-        // TODO: 2021.05.20 -Blue 리스트 메소드 구현
-       return null;
+    public static RentalSimpleResponse of ( Rental rental ) {
+        return new RentalSimpleResponse (
+            rental.getBook().getId(),
+            rental.getBook().getTitle(),
+            rental.getBook().getPublisher().getName(),
+            rental.getStartAt(),
+            rental.getExpiredAt()
+        );
+    }
+
+    public static List<RentalSimpleResponse> listOf (List<Rental> rentals) {
+
+        List<RentalSimpleResponse> responses = new ArrayList<>();
+
+        for ( Rental rental : rentals) {
+            responses.add(of(rental));
+        }
+       return responses;
     }
 }

@@ -39,11 +39,14 @@ public class ApiRentalService {
             .build());
     }
 
+    @Transactional (readOnly = true)
     public List<RentalSimpleResponse> findRentalOnWeek () {
+        // TODO: 2021.05.21 -Blue 인자 값으로 날짜 받기로 변경
+        // RentalRepository 에 @query 사용하기
         LocalDate startAt = LocalDate.now();
-        List<Rental> rentals = rentalRepository.findAllByStartAtBetween(startAt, startAt.plusWeeks(2) );
-        log.info("대여 리스트 {}", rentals);
-        return null;
+        log.info("대여 리스트 {}", rentalRepository.findAllByStartAtAndExpiredAt(startAt, startAt.plusWeeks(2) ));
+        System.out.println("################ >>>>>> " + startAt.plusWeeks(2));
+        return RentalSimpleResponse.listOf(rentalRepository.findAllByStartAtAndExpiredAt(startAt, startAt.plusWeeks(2) ));
     }
 
     private Book findBookById ( Long id ) {

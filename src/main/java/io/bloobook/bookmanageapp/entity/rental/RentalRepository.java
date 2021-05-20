@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @CreateBy: Bloo
  * @Date: 2021/05/06
  */
+
 public interface RentalRepository extends JpaRepository<Rental, Long> {
-    List<Rental> findAllByStartAtBetween( LocalDate startDate, LocalDate expiredAt );
+
+    List<Rental> findAllByStartAtAndExpiredAt( LocalDate startDate, LocalDate expiredAt );
 }
