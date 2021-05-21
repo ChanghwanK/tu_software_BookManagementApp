@@ -32,7 +32,6 @@ public class ApiRentalService {
 
     @Transactional
     public Rental registRental ( RentalRequest rentalRequest ) {
-
         return rentalRepository.save(Rental.builder()
             .user(findUserById(rentalRequest.getUserId()))
             .book(findBookById(rentalRequest.getBookId()))
@@ -40,13 +39,9 @@ public class ApiRentalService {
     }
 
     @Transactional (readOnly = true)
-    public List<RentalSimpleResponse> findRentalOnWeek () {
-        // TODO: 2021.05.21 -Blue 인자 값으로 날짜 받기로 변경
-        // RentalRepository 에 @query 사용하기
-        LocalDate startAt = LocalDate.now();
-        log.info("대여 리스트 {}", rentalRepository.findAllByStartAtAndExpiredAt(startAt, startAt.plusWeeks(2) ));
-        System.out.println("################ >>>>>> " + startAt.plusWeeks(2));
-        return RentalSimpleResponse.listOf(rentalRepository.findAllByStartAtAndExpiredAt(startAt, startAt.plusWeeks(2) ));
+    public List<RentalSimpleResponse> findRentalOnWeek ( LocalDate startedAt, LocalDate expiredAt ) {
+
+        return RentalSimpleResponse.listOf(rentalRepository.findAllByStartAtAndExpiredAt(startedAt, expiredAt));
     }
 
     private Book findBookById ( Long id ) {

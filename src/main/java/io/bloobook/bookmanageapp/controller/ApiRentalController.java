@@ -4,14 +4,17 @@ import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.service.ApiRentalService;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -27,14 +30,18 @@ public class ApiRentalController {
 
     private final ApiRentalService rentalService;
 
-    @PostMapping("")
-    public ResponseEntity<Void> registRental(@RequestBody RentalRequest rentalRequest) {
-        rentalService.registRental (rentalRequest);
+    @PostMapping ("")
+    public ResponseEntity<Void> registRental ( @RequestBody RentalRequest rentalRequest ) {
+        rentalService.registRental(rentalRequest);
         return ResponseEntity.created(URI.create("/api/rental")).build();
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<RentalSimpleResponse>> findRentalsOnWeek() {
-        return ResponseEntity.ok().body(rentalService.findRentalOnWeek());
+    @GetMapping ("")
+    public ResponseEntity<List<RentalSimpleResponse>> findRentalsOnWeek (
+        @RequestParam (value = "startedAt", required = true) @DateTimeFormat (pattern = "yyyy-MM-dd") LocalDate startedAt,
+        @RequestParam (value = "expiredAt", required = true) @DateTimeFormat (pattern = "yyyy-MM-dd") LocalDate expiredAt ) {
+
+
+        return ResponseEntity.ok().body(rentalService.findRentalOnWeek(startedAt, expiredAt));
     }
 }
