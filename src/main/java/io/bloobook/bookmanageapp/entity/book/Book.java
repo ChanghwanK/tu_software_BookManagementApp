@@ -33,7 +33,7 @@ import lombok.ToString;
  */
 
 
-@ToString (exclude = { "publisher", "bookLocation", "rental", "category", "bestBook" })
+@ToString (exclude = { "publisher", "bookLocation", "category", "bestBook" })
 @NoArgsConstructor (access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -82,7 +82,6 @@ public class Book extends BaseTimeEntity {
     @JoinColumn (name = "publisher_id")
     @ManyToOne (fetch = FetchType.LAZY)
     private Publisher publisher;
-
 
     @OneToOne (
         fetch = FetchType.LAZY,
