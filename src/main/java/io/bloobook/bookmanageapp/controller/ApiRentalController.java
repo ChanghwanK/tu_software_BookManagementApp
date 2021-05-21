@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +43,35 @@ public class ApiRentalController {
         @RequestParam (value = "startedAt", required = true) @DateTimeFormat (pattern = "yyyy-MM-dd") LocalDate startedAt,
         @RequestParam (value = "expiredAt", required = true) @DateTimeFormat (pattern = "yyyy-MM-dd") LocalDate expiredAt ) {
 
-
         return ResponseEntity.ok().body(rentalService.findRentalOnWeek(startedAt, expiredAt));
+    }
+
+//    @GetMapping("")
+//    public ResponseEntity<List<RentalSimpleResponse>> findAllRentalSimpleInfo (@RequestParam(value = "email", required = true) String email) {
+//        // TODO: 2021.05.21 -Blue
+//        /**
+//         * [ 메모 ]
+//         * RentalSimpleResponse 를 재사용 하기 위해서 수정 합니다
+//         * 사용자 email 을 통해서 대여목록을 조회할 때 rental Id 가 필요하기 때문에 rental_id 도 함께 내려가도록 수정 합니다.
+//         */
+//
+//       return null;
+//    }
+
+    // TODO: 2021.05.21 -Blue
+    /**
+     *   [대여 연장 흐름]
+     *   사용자 이메일을 통해서 대여 목록을 가져온다.
+     *   대여 목록에는 대여 Id가 있다.
+     *   대여 아이디로 대여 상세 정보를 찾고
+     *   반납 기간을 수정해서 연장한다.
+     *
+     *   따라서 모듈을 분리해서 먼저 email 을 통한 대여 도서 목록 조회 기능을 만든다.
+     *   그리고 거기에 있는 retalId 를 통해 해당 Patch 메소드를 call 한다.
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> expendRentalPeriod (@PathVariable(name = "id") Long rentalId ) {
+        rentalService.expandRentalPeriod(rentalId);
+        return ResponseEntity.ok().build();
     }
 }

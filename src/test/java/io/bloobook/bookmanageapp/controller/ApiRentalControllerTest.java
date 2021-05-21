@@ -138,12 +138,14 @@ class ApiRentalControllerTest {
     @Test
     void findAllRentalBetweenStartedAtExpiredAt () throws Exception {
         // given
-
         Rental rental_01 = Rental.builder()
+            .id(1L)
             .book(testBook)
             .user(testUser)
             .build();
+
         Rental rental_02 = Rental.builder()
+            .id(2L)
             .book(testBook)
             .user(testUser)
             .build();

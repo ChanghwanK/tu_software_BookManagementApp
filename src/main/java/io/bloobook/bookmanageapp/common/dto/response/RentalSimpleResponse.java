@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class RentalSimpleResponse {
 
     private Long bookId;
+    private Long rentalId;
     private String title;
     private String author;
     private String publisherName;
@@ -30,6 +31,7 @@ public class RentalSimpleResponse {
     public static RentalSimpleResponse of ( Rental rental ) {
         return new RentalSimpleResponse (
             rental.getBook().getId(),
+            rental.getId(),
             rental.getBook().getTitle(),
             rental.getBook().getAuthor(),
             rental.getBook().getPublisher().getName(),

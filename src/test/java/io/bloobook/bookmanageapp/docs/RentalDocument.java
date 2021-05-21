@@ -40,6 +40,7 @@ public class RentalDocument {
             ),
             responseFields(
                 fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 ID"),
+                fieldWithPath("[].rentalId").type(JsonFieldType.NUMBER).description("대여 ID"),
                 fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
                 fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 작가"),
                 fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
