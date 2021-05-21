@@ -6,6 +6,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultHandler;
@@ -23,6 +26,25 @@ public class RentalDocument {
             requestFields(
                 fieldWithPath("bookId").type(JsonFieldType.NUMBER).description("도서 ID"),
                 fieldWithPath("userId").type(JsonFieldType.NUMBER).description("회원 ID")
+            )
+        );
+    }
+
+    public static ResultHandler findAllBetweenPeriod() {
+        return document("rental/findAllBetweenPeriod",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            requestParameters(
+                parameterWithName("startedAt").description("대여 날짜"),
+                parameterWithName("expiredAt").description("반납 날짜")
+            ),
+            responseFields(
+                fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 ID"),
+                fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
+                fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 작가"),
+                fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
+                fieldWithPath("[].startedAt").type(JsonFieldType.STRING).description("대여 날짜"),
+                fieldWithPath("[].expiredAt").type(JsonFieldType.STRING).description("반납 날짜")
             )
         );
     }

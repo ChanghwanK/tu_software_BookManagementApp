@@ -22,14 +22,16 @@ public class RentalSimpleResponse {
 
     private Long bookId;
     private String title;
+    private String author;
     private String publisherName;
-    private LocalDate rentalAt;
+    private LocalDate startedAt;
     private LocalDate expiredAt;
 
     public static RentalSimpleResponse of ( Rental rental ) {
         return new RentalSimpleResponse (
             rental.getBook().getId(),
             rental.getBook().getTitle(),
+            rental.getBook().getAuthor(),
             rental.getBook().getPublisher().getName(),
             rental.getStartAt(),
             rental.getExpiredAt()
