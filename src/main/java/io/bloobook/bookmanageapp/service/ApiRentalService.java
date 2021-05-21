@@ -46,11 +46,18 @@ public class ApiRentalService {
         return RentalSimpleResponse.listOf(rentalRepository.findAllByStartAtAndExpiredAt(startedAt, expiredAt));
     }
 
+    @Transactional (readOnly = true)
+    public List<RentalSimpleResponse> findRentalsByUserEmail ( String email ) {
 
+        if (!userRepository.findByEmail(email).isPresent()) {
+            throw new notExistEmailException(email);
+        }
+
+        return RentalSimpleResponse.listOf(rentalRepository.findRentalByUserEmail(email));
+    }
 
     @Transactional
     public Rental expandRentalPeriod ( Long rentalId ) {
-
         // 사용자 이메일을 통해서 대여 목록을 가져온다.
         // 대여 목록에는 대여 Id가 있다.
         // 대여 아이디로 대여 상세 정보를 찾고
@@ -72,5 +79,4 @@ public class ApiRentalService {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new notExistEmailException(email));
     }
-
 }

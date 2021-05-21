@@ -46,17 +46,11 @@ public class ApiRentalController {
         return ResponseEntity.ok().body(rentalService.findRentalOnWeek(startedAt, expiredAt));
     }
 
-//    @GetMapping("")
-//    public ResponseEntity<List<RentalSimpleResponse>> findAllRentalSimpleInfo (@RequestParam(value = "email", required = true) String email) {
-//        // TODO: 2021.05.21 -Blue
-//        /**
-//         * [ 메모 ]
-//         * RentalSimpleResponse 를 재사용 하기 위해서 수정 합니다
-//         * 사용자 email 을 통해서 대여목록을 조회할 때 rental Id 가 필요하기 때문에 rental_id 도 함께 내려가도록 수정 합니다.
-//         */
-//
-//       return null;
-//    }
+    @GetMapping("/user")
+    public ResponseEntity<List<RentalSimpleResponse>> findAllRentalSimpleInfo (@RequestParam(value = "email", required = true) String email) {
+
+       return ResponseEntity.ok().body(rentalService.findRentalsByUserEmail(email));
+    }
 
     // TODO: 2021.05.21 -Blue
     /**
