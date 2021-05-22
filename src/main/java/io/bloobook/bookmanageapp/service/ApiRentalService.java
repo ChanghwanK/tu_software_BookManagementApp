@@ -45,7 +45,7 @@ public class ApiRentalService {
     @Transactional (readOnly = true)
     public List<RentalSimpleResponse> findRentalOnWeek ( LocalDate startedAt, LocalDate expiredAt ) {
         return Collections.unmodifiableList(RentalSimpleResponse
-            .listOf(rentalRepository.findAllByStartAtAndExpiredAt(startedAt, expiredAt)));
+            .listOf(rentalRepository.findAllByStartAtAndExpiredAtAndOnRental(startedAt, expiredAt)));
     }
 
     @Transactional (readOnly = true)

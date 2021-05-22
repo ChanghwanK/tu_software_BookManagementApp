@@ -143,7 +143,7 @@ class ApiRentalServiceTest {
         LocalDate expiredAt = startedAt.plusWeeks(2);
 
         // when
-        when(rentalRepository.findAllByStartAtAndExpiredAt(startedAt, expiredAt))
+        when(rentalRepository.findAllByStartAtAndExpiredAtAndOnRental(startedAt, expiredAt))
             .thenReturn(List.of(rental_01, rental_02));
 
         List<RentalSimpleResponse> result = rentalService.findRentalOnWeek(startedAt, expiredAt);
