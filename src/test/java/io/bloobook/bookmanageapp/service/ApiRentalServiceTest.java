@@ -2,6 +2,7 @@ package io.bloobook.bookmanageapp.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -13,6 +14,9 @@ import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
+import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.NotExistBookStockException;
+import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
@@ -129,11 +133,18 @@ class ApiRentalServiceTest {
         when(bookRepository.findById(anyLong()))
             .thenReturn(Optional.of(testBook));
 
-        rentalService.registRental(rentalRequest);
+        Rental rental = rentalService.registRental(rentalRequest);
 
         // then
-        verify(rentalRepository, times(1)).save(any());
+         verify(rentalRepository, times(1)).save(any());
+
+         assertAll(
+            () -> assertThat(rental.getBook().getTotalRentalCount()).isEqualTo(1),
+            () -> assertThat(rental.getBook().getStockCount()).isEqualTo(4),
+            () -> assertThat(rental.getUser().getTotalRentalBookCount()).isEqualTo(1)
+        );
     }
+
 
     @DisplayName ("특정 기간동안 대여 도서 목록 조회를 테스트")
     @Test
@@ -219,5 +230,66 @@ class ApiRentalServiceTest {
         Rental rental = rentalService.returnRentalBook(anyLong());
         // then
         assertThat(rental.isOnRental()).isFalse();
+    }
+
+    @DisplayName ("잘못된 도서 Id 예외 테스트")
+    @Test
+    void ifBookNotFound () {
+        // given
+        // when
+        when(bookRepository.findById(anyLong()))
+            .thenReturn(Optional.empty());
+
+        // then
+        assertThrows(
+            BookNotFoundException.class, () -> rentalService.registRental(rentalRequest)
+        );
+
+    }
+    @DisplayName ("잘못된 사용자 Id 예외 테스트 ")
+    @Test
+    void ifUserNotFound () {
+        // given
+        // when
+        when(bookRepository.findById(anyLong()))
+            .thenReturn(Optional.of(testBook));
+
+        when(userRepository.findById(anyLong()))
+            .thenReturn(Optional.empty());
+        // then
+        assertThrows(
+            UserNotFoundException.class, () -> rentalService.registRental(rentalRequest)
+        );
+
+    }
+    @DisplayName ("도서 재고 개수가 0일 경우 예외 테스트")
+    @Test
+    void ifBookStockCountIsZero () {
+        // given
+        Book stockCountZeroBook = Book.builder()
+            .id(3L)
+            .bookCode("C-2948")
+            .title("Spring Boot 정복하기")
+            .bookIntroduction("자바를 정복합시다.")
+            .author("David")
+            .thumbnail("www.zpdoweudk.com")
+            .publicationAt(LocalDate.of(2017,2,12))
+            .publisher(publisher)
+            .category(category)
+            .bookLocation(bookLocation)
+            .build();
+
+        for ( int i = 0; i < 5; i++ ) {
+            stockCountZeroBook.decreaseStockCount();
+        }
+
+        // when
+        when(bookRepository.findById(anyLong()))
+            .thenReturn(Optional.of(stockCountZeroBook));
+
+        // then
+        assertThrows(
+            NotExistBookStockException.class, () -> rentalService.registRental(rentalRequest)
+        );
     }
 }

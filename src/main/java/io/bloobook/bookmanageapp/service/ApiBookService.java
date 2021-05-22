@@ -37,23 +37,18 @@ public class ApiBookService {
 
     @Transactional
     public Book saveNewBook ( BookSaveRequest saveRequest ) {
+
         isDuplicatedBook(saveRequest.getBookCode());
         Category category = findCategoryById(saveRequest.getCategoryId());
+        Publisher publisher = findPublisherByBusinessNumber(saveRequest.getPublisherBusinessNumber());
+        BookLocation location = createLocation(category, saveRequest.getLocationCode());
 
-        return saveNewBook(
-            saveRequest, category,
-            findPublisherByBusinessNumber(saveRequest.getPublisherBusinessNumber()),
-            createLocation(category, saveRequest.getLocationCode())
-        );
+        return saveNewBook ( saveRequest, category, publisher, location);
     }
 
     @Transactional (readOnly = true)
     public BookDetailResponse findBookDetailById ( Long id ) {
-        Book findBook = bookRepository.findByIdJoinFetch(id)
-            .orElseThrow(() -> new BookNotFoundException(id));
-
-        log.info("페치 조인을 통해 조회한 도서 >>> {}", findBook);
-
+        Book findBook = findBookById(id);
         return BookDetailResponse.of(findBook);
     }
 

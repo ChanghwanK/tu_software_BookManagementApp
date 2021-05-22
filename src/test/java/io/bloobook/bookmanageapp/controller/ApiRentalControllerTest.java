@@ -22,6 +22,7 @@ import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
 import io.bloobook.bookmanageapp.entity.category.Category;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.rental.Rental;
+import io.bloobook.bookmanageapp.entity.rental.RentalRepository;
 import io.bloobook.bookmanageapp.entity.user.User;
 import io.bloobook.bookmanageapp.service.ApiRentalService;
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -55,6 +57,9 @@ class ApiRentalControllerTest {
 
     @MockBean
     private ApiRentalService rentalService;
+
+    @Mock
+    private RentalRepository rentalRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -148,7 +153,6 @@ class ApiRentalControllerTest {
         )
             .andExpect(status().isCreated())
             .andDo(RentalDocument.registRental());
-
     }
 
     @DisplayName ("기간별 대여 목록 조회를 테스트")
