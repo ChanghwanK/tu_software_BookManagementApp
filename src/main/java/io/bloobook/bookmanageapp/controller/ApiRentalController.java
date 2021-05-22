@@ -47,8 +47,7 @@ public class ApiRentalController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<RentalSimpleResponse>> findAllRentalSimpleInfo (@RequestParam(value = "email", required = true) String email) {
-
+    public ResponseEntity<List<RentalSimpleResponse>> findAllRentalOfUser (@RequestParam(value = "email", required = true) String email) {
        return ResponseEntity.ok().body(rentalService.findRentalsByUserEmail(email));
     }
 
