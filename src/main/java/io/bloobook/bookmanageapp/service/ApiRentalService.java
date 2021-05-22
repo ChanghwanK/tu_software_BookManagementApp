@@ -5,7 +5,7 @@ import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.RentalNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
-import io.bloobook.bookmanageapp.common.exception.notExistEmailException;
+import io.bloobook.bookmanageapp.common.exception.NotExistEmailException;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.rental.Rental;
@@ -36,10 +36,20 @@ public class ApiRentalService {
 
     @Transactional
     public Rental registRental ( RentalRequest rentalRequest ) {
-        return rentalRepository.save(Rental.builder()
-            .user(findUserById(rentalRequest.getUserId()))
-            .book(findBookById(rentalRequest.getBookId()))
-            .build());
+        log.info("Rental Request: {} ", rentalRequest);
+        Book savedBook = findBookById(rentalRequest.getBookId());
+        savedBook.checkStockCount();
+        savedBook.increaseTotalRentalCount();
+        savedBook.decreaseStockCount();
+
+        User savedUser = findUserById(rentalRequest.getUserId());
+        System.out.println(rentalRequest.getUserId());
+        savedUser.increaseBookRentalCount();
+
+        Rental newRental = Rental.of(savedBook, savedUser);
+        rentalRepository.save(newRental);
+
+        return newRental;
     }
 
     @Transactional (readOnly = true)
@@ -86,6 +96,6 @@ public class ApiRentalService {
 
     private User findUserByEmail ( String email ) {
         return userRepository.findByEmail(email)
-            .orElseThrow(() -> new notExistEmailException(email));
+            .orElseThrow(() -> new NotExistEmailException(email));
     }
 }

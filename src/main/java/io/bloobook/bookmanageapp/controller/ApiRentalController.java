@@ -35,6 +35,7 @@ public class ApiRentalController {
 
     @PostMapping ("")
     public ResponseEntity<Void> registRental ( @RequestBody RentalRequest rentalRequest ) {
+        log.info("rental request: {}", rentalRequest);
         rentalService.registRental(rentalRequest);
         return ResponseEntity.created(URI.create("/api/rental")).build();
     }

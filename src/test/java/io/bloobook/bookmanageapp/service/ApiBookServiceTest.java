@@ -132,21 +132,19 @@ class ApiBookServiceTest {
     void findBookById () {
         // given
         // when
-        when(bookRepository.findByIdJoinFetch(anyLong()))
+        when(bookRepository.findById(anyLong()))
             .thenReturn(Optional.of(baseBook));
+
         // then
-        BookDetailResponse bookDetailResponse = bookService.findBookDetailById(anyLong());
+        BookDetailResponse bookDetailResponse = bookService.findBookDetailById(1L);
 
         assertAll(
             () -> assertThat(bookDetailResponse.getBookCode()).isEqualTo(baseBook.getBookCode()),
             () -> assertThat(bookDetailResponse.getTitle()).isEqualTo(baseBook.getTitle()),
-            () -> assertThat(bookDetailResponse.getBookIntroduction())
-                .isEqualTo(baseBook.getBookIntroduction()),
+            () -> assertThat(bookDetailResponse.getBookIntroduction()).isEqualTo(baseBook.getBookIntroduction()),
             () -> assertThat(bookDetailResponse.getPublisherName()).isEqualTo(publisher.getName()),
-            () -> assertThat(bookDetailResponse.getPublisherTelNumber())
-                .isEqualTo(publisher.getTelNumber()),
-            () -> assertThat(bookDetailResponse.getBookLocation())
-                .isEqualTo(bookLocation.getLocationInfo())
+            () -> assertThat(bookDetailResponse.getPublisherTelNumber()).isEqualTo(publisher.getTelNumber()),
+            () -> assertThat(bookDetailResponse.getBookLocation()).isEqualTo(bookLocation.getLocationInfo())
         );
     }
 

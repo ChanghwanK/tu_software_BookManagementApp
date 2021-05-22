@@ -69,6 +69,13 @@ public class Rental extends BaseTimeEntity {
         this.expiredAt = LocalDate.now().plusWeeks(2);
     }
 
+    public static Rental of (Book book, User user) {
+        return Rental.builder()
+            .user(user)
+            .book(book)
+            .build();
+    }
+
     public void returnPeriodExtend () {
         this.expiredAt = expiredAt.plusWeeks(1);
     }

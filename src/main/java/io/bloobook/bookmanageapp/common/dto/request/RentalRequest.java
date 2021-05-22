@@ -4,11 +4,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @CreateBy: Bloo
  * @Date: 2021/05/18
  */
+@ToString
 @NoArgsConstructor (access = AccessLevel.PRIVATE)
 @Getter
 public class RentalRequest {

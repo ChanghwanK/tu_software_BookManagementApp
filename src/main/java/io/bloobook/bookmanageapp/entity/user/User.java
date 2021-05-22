@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
     private String phoneNumber;
 
     @Column (nullable = false)
-    private int rentalBookCount;
+    private int totalRentalBookCount;
 
     @Enumerated (value = EnumType.STRING)
     private UserStatus userStatus;
@@ -51,7 +51,7 @@ public class User extends BaseTimeEntity {
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.rentalBookCount = 0;
+        this.totalRentalBookCount = 0;
         this.userStatus = UserStatus.REGISTER;
     }
 
@@ -59,17 +59,7 @@ public class User extends BaseTimeEntity {
      * 도서 등록 시 대여 카운트를 증가 시킨다.
      */
     public void increaseBookRentalCount () {
-        this.rentalBookCount += 1;
+        this.totalRentalBookCount += 1;
     }
 
-    /**
-     * 도서 반납 시 대여 카운트를 감소 시킨다.
-     */
-    public void decreaseBookRentalCount () {
-        if ( rentalBookCount > 0 ) {
-            rentalBookCount--;
-        } else {
-            rentalBookCount = 0;
-        }
-    }
 }
