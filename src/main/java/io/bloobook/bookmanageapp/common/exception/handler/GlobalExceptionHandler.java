@@ -6,6 +6,8 @@ import io.bloobook.bookmanageapp.common.exception.AlreadyExistCategoryException;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistPublisherException;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.RentalNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,6 +47,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus (HttpStatus.BAD_REQUEST)
     @ExceptionHandler (UserNotFoundException.class)
     public ErrorResponse handleUserNotFoundException ( UserNotFoundException ex ) {
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ResponseStatus (HttpStatus.BAD_REQUEST)
+    @ExceptionHandler (RentalNotFoundException.class)
+    public ErrorResponse handleRentalNotFoundException ( RentalNotFoundException ex ) {
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ResponseStatus (HttpStatus.BAD_REQUEST)
+    @ExceptionHandler (PublisherNotFoundException.class)
+    public ErrorResponse handlePublisherNotFoundException ( PublisherNotFoundException ex ) {
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 

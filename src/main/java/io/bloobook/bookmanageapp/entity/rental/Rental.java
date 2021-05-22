@@ -65,7 +65,7 @@ public class Rental extends BaseTimeEntity {
     }
 
     public void returnPeriodExtend () {
-        this.expiredAt.plusWeeks(1);
+        this.expiredAt = expiredAt.plusWeeks(1);
     }
 
 }

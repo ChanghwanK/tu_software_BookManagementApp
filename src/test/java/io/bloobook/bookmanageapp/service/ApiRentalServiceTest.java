@@ -59,7 +59,7 @@ class ApiRentalServiceTest {
     private BookLocation bookLocation;
     private User testUser;
     private Book testBook;
-
+    private Rental rental_01, rental_02;
 
     @BeforeEach
     void setUp () {
@@ -105,6 +105,17 @@ class ApiRentalServiceTest {
             .category(category)
             .bookLocation(bookLocation)
             .build();
+         rental_01 = Rental.builder()
+            .id(1L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+         rental_02 = Rental.builder()
+            .id(2L)
+            .book(testBook)
+            .user(testUser)
+            .build();
     }
 
     @DisplayName ("도서 저장을 테스트")
@@ -127,15 +138,6 @@ class ApiRentalServiceTest {
     @Test
     void findAllRentalBetweenStartedAtAndExpiredAt () {
         // given
-        Rental rental_01 = Rental.builder()
-            .book(testBook)
-            .user(testUser)
-            .build();
-        Rental rental_02 = Rental.builder()
-            .book(testBook)
-            .user(testUser)
-            .build();
-
         LocalDate startedAt = LocalDate.now();
         LocalDate expiredAt = startedAt.plusWeeks(2);
 
@@ -161,17 +163,6 @@ class ApiRentalServiceTest {
     @Test
     void findRentalsByUserEmail () {
         // given
-        Rental rental_01 = Rental.builder()
-            .id(1L)
-            .book(testBook)
-            .user(testUser)
-            .build();
-
-        Rental rental_02 = Rental.builder()
-            .id(2L)
-            .book(testBook)
-            .user(testUser)
-            .build();
 
         // when
         when(userRepository.findByEmail(anyString()))
@@ -197,6 +188,22 @@ class ApiRentalServiceTest {
             () -> assertThat(result.get(1).getStartedAt()).isEqualTo(rental_01.getStartAt()),
             () -> assertThat(result.get(1).getExpiredAt()).isEqualTo(rental_01.getExpiredAt())
         );
+    }
 
+    @DisplayName ("대여 연장을 테스트")
+    @Test
+    void expandRentalPeriod () {
+        // given
+        // when
+        when(rentalRepository.findById(anyLong()))
+            .thenReturn(Optional.of(rental_01));
+        // then
+        // 기존 대여 만료일 06-05
+        Rental rental = rentalService.expandRentalPeriod(anyLong());
+
+        /**
+         * 대여 날짜는 변경되지 않기 때문에 대여 날을 기준으로 + 3 weeks 가 된다.
+         */
+        assertThat(rental.getExpiredAt()).isEqualTo(rental.getStartAt().plusWeeks(3));
     }
 }
