@@ -14,4 +14,6 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
 
     @Query (value = "select r from Rental r where r.startAt >=:startedAt and r.expiredAt <=:expiredAt")
     List<Rental> findAllByStartAtAndExpiredAt( LocalDate startedAt, LocalDate expiredAt );
+
+    List<Rental> findRentalByUserEmail ( String email );
 }

@@ -152,7 +152,7 @@ include::{snippets}/rental/regist/request-fields.adoc[]
 === Response
 include::{snippets}/rental/regist/http-response.adoc[]
 
-== 대여 도서 조회
+== 기간별 대여 목록 조회
 
 === Request
 
@@ -165,3 +165,20 @@ include::{snippets}/rental/findAllBetweenPeriod/request-parameters.adoc[]
 include::{snippets}/rental/findAllBetweenPeriod/http-response.adoc[]
 
 include::{snippets}/rental/findAllBetweenPeriod/response-fields.adoc[]
+
+
+== 사용자 Email을 통한 대여 목록 조회
+
+=== Request
+
+include::{snippets}/rental/findAllByUserEmail/http-request.adoc[]
+
+include::{snippets}/rental/findAllByUserEmail/request-parameters.adoc[]
+
+
+=== Response
+
+include::{snippets}/rental/findAllByUserEmail/http-response.adoc[]
+
+include::{snippets}/rental/findAllByUserEmail/response-fields.adoc[]
+

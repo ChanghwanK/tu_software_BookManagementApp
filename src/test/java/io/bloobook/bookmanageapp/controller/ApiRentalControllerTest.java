@@ -1,5 +1,6 @@
 package io.bloobook.bookmanageapp.controller;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -65,6 +66,7 @@ class ApiRentalControllerTest {
     private BookLocation bookLocation;
     private User testUser;
     private Book testBook;
+    private Rental rental_01, rental_02;
 
 
     @BeforeEach
@@ -117,6 +119,19 @@ class ApiRentalControllerTest {
             .category(category)
             .bookLocation(bookLocation)
             .build();
+
+        rental_01 = Rental.builder()
+            .id(1L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        rental_02 = Rental.builder()
+            .id(2L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
     }
 
     @DisplayName ("도서 대여 등록 테스트")
@@ -138,22 +153,13 @@ class ApiRentalControllerTest {
     @Test
     void findAllRentalBetweenStartedAtExpiredAt () throws Exception {
         // given
-
-        Rental rental_01 = Rental.builder()
-            .book(testBook)
-            .user(testUser)
-            .build();
-        Rental rental_02 = Rental.builder()
-            .book(testBook)
-            .user(testUser)
-            .build();
-
         LocalDate startedAt = LocalDate.now();
         LocalDate expiredAt = startedAt.plusWeeks(2);
+        List<Rental> rentals = List.of(rental_01, rental_02);
 
         // when
         when(rentalService.findRentalOnWeek(startedAt, expiredAt))
-            .thenReturn(List.of(RentalSimpleResponse.of(rental_01), RentalSimpleResponse.of(rental_02)));
+            .thenReturn(RentalSimpleResponse.listOf(rentals));
 
         // then
         mockMvc.perform(get("/api/rental")
@@ -168,6 +174,30 @@ class ApiRentalControllerTest {
             .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
             .andExpect(jsonPath("$.[1].author").value(testBook.getAuthor()))
             .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
-            .andDo(RentalDocument.findAllBetweenPeriod());
+            .andDo(RentalDocument.findAllBetweenPeriod())
+            ;
+    }
+
+    @DisplayName ("사용자 이메일을 이용하여 도서 대여 내역을 조회한다.")
+    @Test
+    void findAllRentalsByUserEmail () throws Exception {
+        // given
+        List<Rental> rentals = List.of(rental_01, rental_02);
+        // when
+        when(rentalService.findRentalsByUserEmail(anyString()))
+            .thenReturn(RentalSimpleResponse.listOf(rentals));
+        // then
+        mockMvc.perform(get("/api/rental/user")
+            .param("email", "testUser@naver.com")
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].bookId").value(1L))
+            .andExpect(jsonPath("$.[0].title").value(testBook.getTitle()))
+            .andExpect(jsonPath("$.[0].author").value(testBook.getAuthor()))
+            .andExpect(jsonPath("$.[0].publisherName").value(testBook.getPublisher().getName()))
+            .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
+            .andExpect(jsonPath("$.[1].author").value(testBook.getAuthor()))
+            .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
+            .andDo(RentalDocument.findAllRentalsByUserEmail());
     }
 }

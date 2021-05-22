@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -134,6 +135,7 @@ class ApiRentalServiceTest {
             .book(testBook)
             .user(testUser)
             .build();
+
         LocalDate startedAt = LocalDate.now();
         LocalDate expiredAt = startedAt.plusWeeks(2);
 
@@ -153,5 +155,48 @@ class ApiRentalServiceTest {
             () -> assertThat(result.get(1).getPublisherName()).isEqualTo(testBook.getPublisher().getName()),
             () -> assertThat(result.get(1).getTitle()).isEqualTo(testBook.getTitle())
         );
+    }
+
+    @DisplayName ("사용자 이메일을 통해 대여 목록을 조회 한다.")
+    @Test
+    void findRentalsByUserEmail () {
+        // given
+        Rental rental_01 = Rental.builder()
+            .id(1L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        Rental rental_02 = Rental.builder()
+            .id(2L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        // when
+        when(userRepository.findByEmail(anyString()))
+            .thenReturn(Optional.of(testUser));
+
+        when(rentalRepository.findRentalByUserEmail(anyString()))
+            .thenReturn(List.of(rental_01, rental_02));
+        // then
+        List<RentalSimpleResponse> result = rentalService.findRentalsByUserEmail(anyString());
+
+        assertAll (
+            () -> assertThat(result.size()).isEqualTo(2),
+            () -> assertThat(result.get(0).getBookId()).isEqualTo(testBook.getId()),
+            () -> assertThat(result.get(0).getRentalId()).isEqualTo(rental_01.getId()),
+            () -> assertThat(result.get(0).getTitle()).isEqualTo(testBook.getTitle()),
+            () -> assertThat(result.get(0).getPublisherName()).isEqualTo(publisher.getName()),
+            () -> assertThat(result.get(0).getStartedAt()).isEqualTo(rental_01.getStartAt()),
+            () -> assertThat(result.get(0).getExpiredAt()).isEqualTo(rental_01.getExpiredAt()),
+            () -> assertThat(result.get(1).getBookId()).isEqualTo(testBook.getId()),
+            () -> assertThat(result.get(1).getRentalId()).isEqualTo(rental_02.getId()),
+            () -> assertThat(result.get(1).getTitle()).isEqualTo(testBook.getTitle()),
+            () -> assertThat(result.get(1).getPublisherName()).isEqualTo(publisher.getName()),
+            () -> assertThat(result.get(1).getStartedAt()).isEqualTo(rental_01.getStartAt()),
+            () -> assertThat(result.get(1).getExpiredAt()).isEqualTo(rental_01.getExpiredAt())
+        );
+
     }
 }

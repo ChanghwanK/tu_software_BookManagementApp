@@ -40,6 +40,26 @@ public class RentalDocument {
             ),
             responseFields(
                 fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 ID"),
+                fieldWithPath("[].rentalId").type(JsonFieldType.NUMBER).description("대여 ID"),
+                fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
+                fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 작가"),
+                fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
+                fieldWithPath("[].startedAt").type(JsonFieldType.STRING).description("대여 날짜"),
+                fieldWithPath("[].expiredAt").type(JsonFieldType.STRING).description("반납 날짜")
+            )
+        );
+    }
+
+    public static ResultHandler findAllRentalsByUserEmail() {
+        return document("rental/findAllByUserEmail",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            requestParameters(
+                parameterWithName("email").description("사용자 이메일")
+            ),
+            responseFields(
+                fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 ID"),
+                fieldWithPath("[].rentalId").type(JsonFieldType.NUMBER).description("대여 ID"),
                 fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
                 fieldWithPath("[].author").type(JsonFieldType.STRING).description("도서 작가"),
                 fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 이름"),
