@@ -105,7 +105,8 @@ class ApiRentalServiceTest {
             .category(category)
             .bookLocation(bookLocation)
             .build();
-         rental_01 = Rental.builder()
+
+        rental_01 = Rental.builder()
             .id(1L)
             .book(testBook)
             .user(testUser)
@@ -205,5 +206,18 @@ class ApiRentalServiceTest {
          * 대여 날짜는 변경되지 않기 때문에 대여 날을 기준으로 + 3 weeks 가 된다.
          */
         assertThat(rental.getExpiredAt()).isEqualTo(rental.getStartAt().plusWeeks(3));
+    }
+
+    @DisplayName ("대여 반납을 테스트")
+    @Test
+    void returnRentalBook () {
+        // given
+        // when
+        when(rentalRepository.findById(anyLong()))
+            .thenReturn(Optional.of(rental_01));
+
+        Rental rental = rentalService.returnRentalBook(anyLong());
+        // then
+        assertThat(rental.isOnRental()).isFalse();
     }
 }

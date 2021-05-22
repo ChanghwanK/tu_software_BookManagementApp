@@ -3,6 +3,7 @@ package io.bloobook.bookmanageapp.controller;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -211,6 +212,16 @@ class ApiRentalControllerTest {
         mockMvc.perform(patch("/api/rental/{id}", 1L))
             .andExpect(status().isOk())
             .andDo(RentalDocument.expandRentalPeriod());
+    }
 
+    @DisplayName ("대여 반납을 테스트")
+    @Test
+    void returnRentalBook () throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(delete("/api/rental/{id}", 1L))
+            .andExpect(status().isOk())
+            .andDo(RentalDocument.returnRentalBook());
     }
 }

@@ -79,4 +79,14 @@ public class RentalDocument {
                 )
             );
     }
+
+    public static ResultHandler returnRentalBook () {
+        return document("rental/return",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("id").description("대여 ID")
+            )
+        );
+    }
 }

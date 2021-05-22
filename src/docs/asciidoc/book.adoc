@@ -1,11 +1,11 @@
-= Book  Management  API  Guide
+= Book  Management  API  Docs
 CreateBy: Changhwan Kim;
 :doctype: book
+:toc: left
+:toclevels: 2
 :icons: font
 :source-highlighter: highlightjs
 :snippets: /Users/levi/Desktop/dev/workspace/projects/bookmanageapp/build/generated-snippets
-:toc: left
-:toclevels: 1
 
 [[overview]]
 = Overview
@@ -55,28 +55,25 @@ CreateBy: Changhwan Kim;
 | 요청 URL 이 잘못된 경우 응답 코드
 |===
 
-== BOOK API
+= Book
 
-=== 도서 등록
+
+== 도서 등록
 
 === Request
 
 include::{snippets}/books/save/http-request.adoc[]
 
 
----
-
-
-
 include::{snippets}/books/save/request-fields.adoc[]
 
----
+
 
 === Response
 
 include::{snippets}/books/save/http-response.adoc[]
 
-=== 도서 상세 조회
+== 도서 상세 조회
 
 === Request
 
@@ -91,7 +88,7 @@ include::{snippets}/books/findById/path-parameters.adoc[]
 
 include::{snippets}/books/findById/http-response.adoc[]
 
-=== Title 을 이용한 도서 목록 조회
+== Title 을 이용한 도서 목록 조회
 
 === Request
 
@@ -109,7 +106,9 @@ include::{snippets}/books/findByTitle/response-fields.adoc[]
 
 ---
 
-=== Category Id 를 이용한 도서 목록 조회
+= Category
+
+== Category Id 를 이용한 도서 목록 조회
 
 === Request
 
@@ -124,7 +123,7 @@ include::{snippets}/books/findAllByCategoryId/http-response.adoc[]
 include::{snippets}/books/findAllByCategoryId/response-fields.adoc[]
 
 
-=== 도서 정보 수정
+== 도서 정보 수정
 
 === Request
 
@@ -137,8 +136,7 @@ include::{snippets}/books/updateBook/request-fields.adoc[]
 include::{snippets}/books/updateBook/http-response.adoc[]
 
 
-== RENTAL API
-- 도서 대여 서비스 API 입니다.
+= Rental
 
 == 대여 등록
 
@@ -182,7 +180,7 @@ include::{snippets}/rental/findAllByUserEmail/http-response.adoc[]
 
 include::{snippets}/rental/findAllByUserEmail/response-fields.adoc[]
 
-=== 대여 기간 연장
+== 대여 기간 연장
 
 === Request
 
@@ -194,3 +192,17 @@ include::{snippets}/rental/expandPeriod/path-parameters.adoc[]
 === Response
 
 include::{snippets}/rental/expandPeriod/http-response.adoc[]
+
+
+== 대여 도서 반납
+
+=== Request
+
+include::{snippets}/rental/return/http-request.adoc[]
+
+include::{snippets}/rental/return/path-parameters.adoc[]
+
+
+=== Response
+
+include::{snippets}/rental/return/http-response.adoc[]
