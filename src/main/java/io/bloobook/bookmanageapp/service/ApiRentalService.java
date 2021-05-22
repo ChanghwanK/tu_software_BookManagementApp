@@ -62,6 +62,13 @@ public class ApiRentalService {
         return rental;
     }
 
+    @Transactional
+    public Rental returnRentalBook ( Long rentalId ) {
+        Rental rental = findRentalById(rentalId);
+        rental.returnRentalBook();
+        return rental;
+    }
+
     private Book findBookById ( Long id ) {
         return bookRepository.findById(id)
             .orElseThrow(() -> new BookNotFoundException(id));

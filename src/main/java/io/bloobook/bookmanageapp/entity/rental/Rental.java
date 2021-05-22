@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,8 +44,11 @@ public class Rental extends BaseTimeEntity {
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @OneToOne (fetch = FetchType.LAZY)
     private Book book;
+
+    @Column (nullable = false)
+    private boolean onRental;
 
     @NonNull
     @Column (nullable = false)
@@ -60,12 +64,17 @@ public class Rental extends BaseTimeEntity {
         this.user = user;
         this.book = book;
         this.rentalStatus = RentalStatus.RENTAL;
+        this.onRental = true;
         this.startAt = LocalDate.now();
         this.expiredAt = LocalDate.now().plusWeeks(2);
     }
 
     public void returnPeriodExtend () {
         this.expiredAt = expiredAt.plusWeeks(1);
+    }
+
+    public void returnRentalBook () {
+        this.onRental = false;
     }
 
 }
