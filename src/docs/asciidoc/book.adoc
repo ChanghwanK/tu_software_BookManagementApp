@@ -182,3 +182,15 @@ include::{snippets}/rental/findAllByUserEmail/http-response.adoc[]
 
 include::{snippets}/rental/findAllByUserEmail/response-fields.adoc[]
 
+=== 대여 기간 연장
+
+=== Request
+
+include::{snippets}/rental/expandPeriod/http-request.adoc[]
+
+include::{snippets}/rental/expandPeriod/path-parameters.adoc[]
+
+
+=== Response
+
+include::{snippets}/rental/expandPeriod/http-response.adoc[]

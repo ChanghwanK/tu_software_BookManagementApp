@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -178,7 +179,7 @@ class ApiRentalControllerTest {
             ;
     }
 
-    @DisplayName ("사용자 이메일을 이용하여 도서 대여 내역을 조회한다.")
+    @DisplayName ("사용자 이메일을 이용하여 도서 대여 내역을 조회를 테스.")
     @Test
     void findAllRentalsByUserEmail () throws Exception {
         // given
@@ -199,5 +200,17 @@ class ApiRentalControllerTest {
             .andExpect(jsonPath("$.[1].author").value(testBook.getAuthor()))
             .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
             .andDo(RentalDocument.findAllRentalsByUserEmail());
+    }
+
+    @DisplayName ("대여 연장을 테스트 ")
+    @Test
+    void expandRentalPeriod () throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(patch("/api/rental/{id}", 1L))
+            .andExpect(status().isOk())
+            .andDo(RentalDocument.expandRentalPeriod());
+
     }
 }

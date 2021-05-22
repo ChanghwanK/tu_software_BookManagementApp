@@ -8,6 +8,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -50,7 +51,7 @@ public class RentalDocument {
         );
     }
 
-    public static ResultHandler findAllRentalsByUserEmail() {
+    public static ResultHandler findAllRentalsByUserEmail () {
         return document("rental/findAllByUserEmail",
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
@@ -67,5 +68,15 @@ public class RentalDocument {
                 fieldWithPath("[].expiredAt").type(JsonFieldType.STRING).description("반납 날짜")
             )
         );
+    }
+
+    public static ResultHandler expandRentalPeriod () {
+        return document("rental/expandPeriod",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("id").description("대여 ID")
+                )
+            );
     }
 }

@@ -3,6 +3,7 @@ package io.bloobook.bookmanageapp.service;
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.RentalNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.notExistEmailException;
 import io.bloobook.bookmanageapp.entity.book.Book;
@@ -12,6 +13,7 @@ import io.bloobook.bookmanageapp.entity.rental.RentalRepository;
 import io.bloobook.bookmanageapp.entity.user.User;
 import io.bloobook.bookmanageapp.entity.user.UserRepository;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,32 +44,32 @@ public class ApiRentalService {
 
     @Transactional (readOnly = true)
     public List<RentalSimpleResponse> findRentalOnWeek ( LocalDate startedAt, LocalDate expiredAt ) {
-
-        return RentalSimpleResponse.listOf(rentalRepository.findAllByStartAtAndExpiredAt(startedAt, expiredAt));
+        return Collections.unmodifiableList(RentalSimpleResponse
+            .listOf(rentalRepository.findAllByStartAtAndExpiredAt(startedAt, expiredAt)));
     }
 
     @Transactional (readOnly = true)
     public List<RentalSimpleResponse> findRentalsByUserEmail ( String email ) {
-
-        if (!userRepository.findByEmail(email).isPresent()) {
-            throw new notExistEmailException(email);
-        }
-
-        return RentalSimpleResponse.listOf(rentalRepository.findRentalByUserEmail(email));
+        findUserByEmail(email);
+        return Collections.unmodifiableList(RentalSimpleResponse
+            .listOf(rentalRepository.findRentalByUserEmail(email)));
     }
 
     @Transactional
     public Rental expandRentalPeriod ( Long rentalId ) {
-        // 사용자 이메일을 통해서 대여 목록을 가져온다.
-        // 대여 목록에는 대여 Id가 있다.
-        // 대여 아이디로 대여 상세 정보를 찾고
-        // 반납 기간을 수정해서 연장한다.
-        return null;
+        Rental rental = findRentalById(rentalId);
+        rental.returnPeriodExtend();
+        return rental;
     }
 
     private Book findBookById ( Long id ) {
         return bookRepository.findById(id)
             .orElseThrow(() -> new BookNotFoundException(id));
+    }
+
+    private Rental findRentalById ( Long id ) {
+        return rentalRepository.findById(id)
+            .orElseThrow(() -> new RentalNotFoundException(id));
     }
 
     private User findUserById ( Long id ) {
