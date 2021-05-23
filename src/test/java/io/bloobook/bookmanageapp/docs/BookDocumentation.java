@@ -94,6 +94,22 @@ public class BookDocumentation {
         );
     }
 
+    public static ResultHandler findAllStockCountByCategoryId () {
+        return document("books/stockCount",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                pathParameters(
+                    parameterWithName("id").description("카테고리 ID")
+                ),
+                responseFields(
+                    fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 Id"),
+                    fieldWithPath("[].title").type(JsonFieldType.STRING).description("도서 제목"),
+                    fieldWithPath("[].publisherName").type(JsonFieldType.STRING).description("출판사 명"),
+                    fieldWithPath("[].stockCount").type(JsonFieldType.NUMBER).description("재고 개수")
+                )
+            );
+    }
+
     public static ResultHandler updateBookInfo () {
         return document("books/updateBook",
                 preprocessRequest(prettyPrint()),

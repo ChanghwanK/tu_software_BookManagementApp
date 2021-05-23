@@ -122,6 +122,20 @@ include::{snippets}/books/findAllByCategoryId/http-response.adoc[]
 
 include::{snippets}/books/findAllByCategoryId/response-fields.adoc[]
 
+== 재고 조회
+
+=== Request
+
+include::{snippets}/books/stockCount/http-request.adoc[]
+
+include::{snippets}/books/stockCount/path-parameters.adoc[]
+
+
+=== Response
+
+include::{snippets}/books/stockCount/http-response.adoc[]
+
+include::{snippets}/books/stockCount/response-fields.adoc[]
 
 == 도서 정보 수정
 

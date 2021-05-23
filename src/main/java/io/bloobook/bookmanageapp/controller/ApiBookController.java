@@ -4,6 +4,7 @@ import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookStockCountResponse;
 import io.bloobook.bookmanageapp.service.ApiBookService;
 import java.net.URI;
 import java.util.List;
@@ -20,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * todo
+ * - URL RESTful 에 맞게 개선 해야 함
+ * - 현재 search 라는 URL 이 들어가 있는데 명사로 변경해야 함
+ *
  * @CreateBy: Bloo
  * @Date: 2021/05/08
  */
@@ -46,17 +51,21 @@ public class ApiBookController {
         return ResponseEntity.ok().body(bookService.findBookDetailById(id));
     }
 
-    @GetMapping ("/search/{title}")
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle (
-        @PathVariable String title ) {
+    @GetMapping ("/search/{title}")  //todo path_variable -> request_param 으로 변경하기
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
         log.info("Book Title: {}", title);
         return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
 
-    @GetMapping ("/search/category/{categoryId}")
+    @GetMapping ("/search/category/{categoryId}") //todo  빼고 그냥 카테고리만 남기기
     public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
+    }
+
+    @GetMapping("/stock/category/{id}")
+    public ResponseEntity<List<BookStockCountResponse>> findBooksStockCountInfo ( @PathVariable Long id) {
+        return ResponseEntity.ok().body(bookService.findAllBooksStockCount(id));
     }
 
     @PutMapping ("/{id}")

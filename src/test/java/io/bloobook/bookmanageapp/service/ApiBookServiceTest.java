@@ -14,6 +14,7 @@ import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookStockCountResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
@@ -196,6 +197,30 @@ class ApiBookServiceTest {
                 .isEqualTo(testBook.getThumbnail())
         );
     }
+    
+    @DisplayName ("카테고리별 도서 재고 조회를 테스트")
+    @Test
+    void findAllBooksStockCountByCategoryId () {
+        // given
+
+        // when
+        when(categoryRepository.findById(anyLong()))
+            .thenReturn(Optional.of(category));
+
+        when(bookRepository.findAllByCategoryId(anyLong()))
+            .thenReturn(List.of(baseBook, testBook));
+
+        List<BookStockCountResponse> stockCountResponses = bookService.findAllBooksStockCount(anyLong());
+
+        // then
+        assertAll(
+            () -> assertThat(stockCountResponses.size()).isEqualTo(2),
+            () -> assertThat(stockCountResponses.get(0).getTitle()).isEqualTo(baseBook.getTitle()),
+            () -> assertThat(stockCountResponses.get(0).getStockCount()).isEqualTo(5),
+            () -> assertThat(stockCountResponses.get(1).getTitle()).isEqualTo(testBook.getTitle()),
+            () -> assertThat(stockCountResponses.get(1).getStockCount()).isEqualTo(5)
+        );
+    }
 
     @DisplayName ("도서 정보 수정 테스트")
     @Test
@@ -213,6 +238,7 @@ class ApiBookServiceTest {
             () -> assertThat(updateBook.getThumbnail()).isEqualTo(updateBook.getThumbnail())
         );
     }
+    
 
     @DisplayName ("이미 존재하는 도서에 대한 예외 테스트")
     @Test
