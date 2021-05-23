@@ -223,6 +223,7 @@ class ApiBookControllerTest {
             .andExpect(jsonPath("$.[1].bookId").value(2L))
             .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
             .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
+            .andDo(BookDocumentation.findAllStockCountByCategoryId())
             ;
     }
 
