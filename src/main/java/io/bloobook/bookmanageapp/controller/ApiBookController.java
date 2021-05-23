@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -51,13 +52,13 @@ public class ApiBookController {
         return ResponseEntity.ok().body(bookService.findBookDetailById(id));
     }
 
-    @GetMapping ("/search/{title}")  //todo path_variable -> request_param 으로 변경하기
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
+    @GetMapping ("")
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @RequestParam String title ) {
         log.info("Book Title: {}", title);
         return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
 
-    @GetMapping ("/search/category/{categoryId}") //todo  빼고 그냥 카테고리만 남기기
+    @GetMapping ("/category/{categoryId}") //todo  빼고 그냥 카테고리만 남기기
     public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));

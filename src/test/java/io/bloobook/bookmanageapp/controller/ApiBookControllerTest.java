@@ -181,7 +181,7 @@ class ApiBookControllerTest {
             .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
 
         // then
-        mockMvc.perform(get("/api/books/search/{title}", "Java"))
+        mockMvc.perform(get("/api/books").param("title","자바"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
             .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
@@ -195,7 +195,7 @@ class ApiBookControllerTest {
             .thenReturn(BookSimpleResponse.listOf(List.of(baseBook, testBook)));
 
         // then
-        mockMvc.perform(get("/api/books/search/category/{categoryId}", 1L))
+        mockMvc.perform(get("/api/books//category/{categoryId}", 1L))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
             .andExpect(jsonPath("$.[0].author").value(baseBook.getAuthor()))

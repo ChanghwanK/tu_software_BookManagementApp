@@ -9,6 +9,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultHandler;
@@ -64,7 +65,7 @@ public class BookDocumentation {
         return document("books/findByTitle",
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
-            pathParameters(
+            requestParameters(
                 parameterWithName("title").description("도서 제목")
             ),
             responseFields(
