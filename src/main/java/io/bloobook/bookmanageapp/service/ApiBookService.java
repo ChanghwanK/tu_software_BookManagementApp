@@ -4,6 +4,7 @@ import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookStockCountResponse;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
@@ -64,12 +65,18 @@ public class ApiBookService {
         return BookSimpleResponse.listOf(books);
     }
 
+    @Transactional (readOnly = true)
+    public List<BookStockCountResponse> findAllBooksStockCount ( Long categoryId ) {
+        findCategoryById(categoryId);
+        List<Book> books = bookRepository.findAllByCategoryId(categoryId);
+        return Collections.unmodifiableList(BookStockCountResponse.listOf(books));
+    }
+
     @Transactional
     public Book updateBookInfo ( Long id, BookUpdateRequest updateRequest ) {
         Book savedBook = findBookById(id);
         return savedBook.updateBook(updateRequest);
     }
-
 
     private void isDuplicatedBook ( String bookCode ) {
         if ( bookRepository.findByBookCode(bookCode).isPresent() ) {
@@ -77,8 +84,7 @@ public class ApiBookService {
         }
     }
 
-    private Book saveNewBook ( BookSaveRequest request, Category category, Publisher publisher,
-        BookLocation bookLocation ) {
+    private Book saveNewBook ( BookSaveRequest request, Category category, Publisher publisher, BookLocation bookLocation ) {
         Book newBook = request.createNewBook(category, publisher, bookLocation);
         return bookRepository.save(newBook);
     }
@@ -104,4 +110,5 @@ public class ApiBookService {
         return publisherRepository.findByBusinessNumber(businessNumber)
             .orElseThrow(() -> new PublisherNotFoundException(businessNumber));
     }
+
 }

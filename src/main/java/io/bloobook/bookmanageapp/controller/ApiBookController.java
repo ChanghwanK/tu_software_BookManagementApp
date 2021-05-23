@@ -4,6 +4,7 @@ import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookStockCountResponse;
 import io.bloobook.bookmanageapp.service.ApiBookService;
 import java.net.URI;
 import java.util.List;
@@ -20,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * todo
+ * - URL RESTful 에 맞게 개선 해야 함
+ * - 현재 search 라는 URL 이 들어가 있는데 명사로 변경해야 함
+ *
  * @CreateBy: Bloo
  * @Date: 2021/05/08
  */
@@ -47,8 +52,7 @@ public class ApiBookController {
     }
 
     @GetMapping ("/search/{title}")
-    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle (
-        @PathVariable String title ) {
+    public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
         log.info("Book Title: {}", title);
         return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
@@ -57,6 +61,11 @@ public class ApiBookController {
     public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
+    }
+
+    @GetMapping("/search/{categotyId}")
+    public ResponseEntity<List<BookStockCountResponse>> findBooksStockCountInfo ( @PathVariable Long categoryId) {
+        return ResponseEntity.ok().body(bookService.findAllBooksStockCount(categoryId));
     }
 
     @PutMapping ("/{id}")
