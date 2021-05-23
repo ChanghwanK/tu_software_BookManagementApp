@@ -16,6 +16,7 @@ import io.bloobook.bookmanageapp.common.dto.request.BookSaveRequest;
 import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.dto.response.BookDetailResponse;
 import io.bloobook.bookmanageapp.common.dto.response.BookSimpleResponse;
+import io.bloobook.bookmanageapp.common.dto.response.BookStockCountResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
@@ -203,6 +204,26 @@ class ApiBookControllerTest {
             .andExpect(jsonPath("$.[1].author").value(testBook.getAuthor()))
             .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
             .andDo(BookDocumentation.findAllByCategoryId());
+    }
+
+    @DisplayName ("카테고리별 도서 재고 조회 테스트")
+    @Test
+    void findAllBooksStockCountByCategoryId () throws Exception {
+        // given
+        // when
+        when(bookService.findAllBooksStockCount(anyLong()))
+            .thenReturn(BookStockCountResponse.listOf(List.of(baseBook, testBook)));
+        // then
+
+        mockMvc.perform(get("/api/books/stock/category/{id}", 1L))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].bookId").value(1L))
+            .andExpect(jsonPath("$.[0].title").value(baseBook.getTitle()))
+            .andExpect(jsonPath("$.[0].publisherName").value(baseBook.getPublisher().getName()))
+            .andExpect(jsonPath("$.[1].bookId").value(2L))
+            .andExpect(jsonPath("$.[1].title").value(testBook.getTitle()))
+            .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
+            ;
     }
 
     @DisplayName ("도서정보 수정을 테스트")

@@ -51,21 +51,21 @@ public class ApiBookController {
         return ResponseEntity.ok().body(bookService.findBookDetailById(id));
     }
 
-    @GetMapping ("/search/{title}")
+    @GetMapping ("/search/{title}")  //todo path_variable -> request_param 으로 변경하기
     public ResponseEntity<List<BookSimpleResponse>> findBooksByTitle ( @PathVariable String title ) {
         log.info("Book Title: {}", title);
         return ResponseEntity.ok().body(bookService.findBooksByTitle(title));
     }
 
-    @GetMapping ("/search/category/{categoryId}")
+    @GetMapping ("/search/category/{categoryId}") //todo  빼고 그냥 카테고리만 남기기
     public ResponseEntity<List<BookSimpleResponse>> findBooksByCategoryId ( @PathVariable Long categoryId ) {
         log.info("Category Id: {}", categoryId);
         return ResponseEntity.ok().body(bookService.findAllByCategoryId(categoryId));
     }
 
-    @GetMapping("/search/{categotyId}")
-    public ResponseEntity<List<BookStockCountResponse>> findBooksStockCountInfo ( @PathVariable Long categoryId) {
-        return ResponseEntity.ok().body(bookService.findAllBooksStockCount(categoryId));
+    @GetMapping("/stock/category/{id}")
+    public ResponseEntity<List<BookStockCountResponse>> findBooksStockCountInfo ( @PathVariable Long id) {
+        return ResponseEntity.ok().body(bookService.findAllBooksStockCount(id));
     }
 
     @PutMapping ("/{id}")
