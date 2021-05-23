@@ -31,7 +31,7 @@ CreateBy: Changhwan Kim;
 | 수정 요청은 PUT Method 를 사용 하세요
 
 | `DELETE`
-| 우리 서비스는 DELETE 요청을 사용하지 않습니다.
+| 삭제 요청은 DELETE Method 를 사용 하세요.
 |===
 
 [[overview_http_status_codes]]
@@ -94,7 +94,7 @@ include::{snippets}/books/findById/http-response.adoc[]
 
 include::{snippets}/books/findByTitle/http-request.adoc[]
 
-include::{snippets}/books/findByTitle/path-parameters.adoc[]
+include::{snippets}/books/findByTitle/request-parameters.adoc[]
 
 === Response
 

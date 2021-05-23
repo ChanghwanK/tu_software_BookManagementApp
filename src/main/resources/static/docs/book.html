@@ -567,7 +567,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>DELETE</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">우리 서비스는 DELETE 요청을 사용하지 않습니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제 요청은 DELETE Method 를 사용 하세요.</p></td>
 </tr>
 </tbody>
 </table>
@@ -789,12 +789,11 @@ Content-Length: 408
 <h3 id="_request_3">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/books/search/Java HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/books?title=%EC%9E%90%EB%B0%94 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 2. /api/books/search/{title}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -889,12 +888,12 @@ Content-Length: 312
 <h3 id="_request_4">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/books/search/category/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/books/category/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 3. /api/books/search/category/{categoryId}</caption>
+<caption class="title">Table 2. /api/books//category/{categoryId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -992,7 +991,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 4. /api/books/stock/category/{id}</caption>
+<caption class="title">Table 3. /api/books/stock/category/{id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1442,7 +1441,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 5. /api/rental/{id}</caption>
+<caption class="title">Table 4. /api/rental/{id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1483,7 +1482,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 6. /api/rental/{id}</caption>
+<caption class="title">Table 5. /api/rental/{id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1515,7 +1514,7 @@ Host: localhost:8080</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-23 13:17:20 KST
+Last updated 2021-05-23 13:44:35 KST
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
