@@ -128,8 +128,9 @@ public class Book extends BaseTimeEntity {
         return this;
     }
 
-    public void increaseStockCount ( int stockCount ) {
+    public int updateStockCount ( int stockCount ) {
         this.stockCount += stockCount;
+        return this.stockCount;
     }
 
     public void increaseTotalRentalCount () {
