@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,6 +68,12 @@ public class ApiBookController {
     @GetMapping("/stock/category/{id}")
     public ResponseEntity<List<BookStockCountResponse>> findBooksStockCountInfo ( @PathVariable Long id) {
         return ResponseEntity.ok().body(bookService.findAllBooksStockCount(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateBookStockCount(@PathVariable Long id, @RequestParam int stockCount) {
+        bookService.stockCountUpdate(id, stockCount);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping ("/{id}")

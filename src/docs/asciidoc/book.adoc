@@ -149,6 +149,20 @@ include::{snippets}/books/updateBook/request-fields.adoc[]
 
 include::{snippets}/books/updateBook/http-response.adoc[]
 
+== 도서 재고 수정
+
+=== Request
+
+include::{snippets}/books/updateStockCount/http-request.adoc[]
+
+include::{snippets}/books/updateStockCount/request-parameters.adoc[]
+
+== Response
+
+include::{snippets}/books/updateStockCount/http-response.adoc[]
+
+
+---
 
 = Rental
 

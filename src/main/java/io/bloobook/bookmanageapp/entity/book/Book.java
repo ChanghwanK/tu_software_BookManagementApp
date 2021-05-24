@@ -2,6 +2,7 @@ package io.bloobook.bookmanageapp.entity.book;
 
 import io.bloobook.bookmanageapp.common.dto.request.BookUpdateRequest;
 import io.bloobook.bookmanageapp.common.enumclass.status.BookStatus;
+import io.bloobook.bookmanageapp.common.exception.BookStockCountZeroException;
 import io.bloobook.bookmanageapp.common.exception.NotExistBookStockException;
 import io.bloobook.bookmanageapp.entity.BaseTimeEntity;
 import io.bloobook.bookmanageapp.entity.bestBook.BestBook;
@@ -128,8 +129,9 @@ public class Book extends BaseTimeEntity {
         return this;
     }
 
-    public void increaseStockCount ( int stockCount ) {
-        this.stockCount += stockCount;
+    public int updateStockCount ( int stockCount ) {
+        this.stockCount = stockCount;
+        return this.stockCount;
     }
 
     public void increaseTotalRentalCount () {
@@ -137,7 +139,12 @@ public class Book extends BaseTimeEntity {
     }
 
     public void decreaseStockCount () {
-        this.stockCount--;
+        if (this.stockCount > 0) {
+            this.stockCount--;
+        } else {
+            throw new BookStockCountZeroException();
+        }
+
     }
 
     public void checkStockCount () {

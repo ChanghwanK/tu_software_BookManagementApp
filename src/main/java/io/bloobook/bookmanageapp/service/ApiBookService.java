@@ -78,6 +78,12 @@ public class ApiBookService {
         return savedBook.updateBook(updateRequest);
     }
 
+    @Transactional
+    public int stockCountUpdate ( Long id, int stockCount ) {
+        Book book = findBookById(id);
+        return book.updateStockCount(stockCount);
+    }
+
     private void isDuplicatedBook ( String bookCode ) {
         if ( bookRepository.findByBookCode(bookCode).isPresent() ) {
             throw new AlreadyExistBookException(bookCode);
