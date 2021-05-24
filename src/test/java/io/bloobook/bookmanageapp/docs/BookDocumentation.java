@@ -110,6 +110,18 @@ public class BookDocumentation {
                 )
             );
     }
+    public static ResultHandler updateStockCount() {
+        return document("books/updateStockCount",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("id").description("도서 ID")
+            ),
+            requestParameters(
+                parameterWithName("stockCount").description("수정할 재고 개수")
+            )
+        );
+    }
 
     public static ResultHandler updateBookInfo () {
         return document("books/updateBook",

@@ -237,7 +237,8 @@ class ApiBookControllerTest {
         mockMvc.perform(patch("/api/books/{id}",1L)
             .param("stockCount", "10")
         )
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andDo(BookDocumentation.updateStockCount());
     }
 
     @DisplayName ("도서정보 수정을 테스트")
