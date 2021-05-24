@@ -238,6 +238,19 @@ class ApiBookServiceTest {
             () -> assertThat(updateBook.getThumbnail()).isEqualTo(updateBook.getThumbnail())
         );
     }
+
+    @DisplayName ("도서 재고 정보 수정")
+    @Test
+    void updateStockCount () {
+        // given
+        // when
+        when(bookRepository.findById(anyLong()))
+            .thenReturn(Optional.of(baseBook));
+
+
+        // then
+
+    }
     
 
     @DisplayName ("이미 존재하는 도서에 대한 예외 테스트")
