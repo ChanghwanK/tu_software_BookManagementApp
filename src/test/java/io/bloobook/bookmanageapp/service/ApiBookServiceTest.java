@@ -247,9 +247,10 @@ class ApiBookServiceTest {
         when(bookRepository.findById(anyLong()))
             .thenReturn(Optional.of(baseBook));
 
+        int result = bookService.stockCountUpdate(1L , 10);
 
         // then
-
+        assertThat(result).isEqualTo(10);
     }
     
 

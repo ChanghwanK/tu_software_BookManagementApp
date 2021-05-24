@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -225,6 +226,18 @@ class ApiBookControllerTest {
             .andExpect(jsonPath("$.[1].publisherName").value(testBook.getPublisher().getName()))
             .andDo(BookDocumentation.findAllStockCountByCategoryId())
             ;
+    }
+
+    @DisplayName ("도서 재고 수정을 테스트")
+    @Test
+    void bookStockCountUpdate () throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(patch("/api/books/{id}",1L)
+            .param("stockCount", "10")
+        )
+            .andExpect(status().isOk());
     }
 
     @DisplayName ("도서정보 수정을 테스트")
