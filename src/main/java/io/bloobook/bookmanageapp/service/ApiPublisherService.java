@@ -2,6 +2,7 @@ package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.PublisherSaveRequest;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistPublisherException;
+import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
 import io.bloobook.bookmanageapp.entity.publisher.Publisher;
 import io.bloobook.bookmanageapp.entity.publisher.PublisherRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,9 @@ public class ApiPublisherService {
         return publisherRepository.save(request.toEntity());
     }
 
+    @Transactional
     public void terminatePublisher ( Long id ) {
-        // TODO: 2021.05.25 -Blue  -> refactoring 후 계약 해지 기능 구현 해주세요!!
+        findPublisherById(id).terminate();
     }
 
     private void isDuplicatedBusinessNumber ( String businessNumber ) {
@@ -37,8 +39,8 @@ public class ApiPublisherService {
         }
     }
 
-//    private Publisher findPublisherById ( Long id ) {
-//        return publisherRepository.findById(id)
-//            .orElseThrow(() -> PublisherNotFoundException());
-//    }
+    private Publisher findPublisherById ( Long id ) {
+        return publisherRepository.findById(id)
+            .orElseThrow(PublisherNotFoundException::new);
+    }
 }

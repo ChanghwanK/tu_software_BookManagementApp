@@ -63,4 +63,7 @@ public class Publisher extends BaseTimeEntity {
         this.publisherStatus = publisherStatus;
     }
 
+    public void terminate() {
+        this.publisherStatus = PublisherStatus.UNREGISTER;
+    }
 }
