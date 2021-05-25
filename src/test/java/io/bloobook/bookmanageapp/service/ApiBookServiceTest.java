@@ -20,7 +20,7 @@ import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
-import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.BusinessNumberNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
@@ -295,7 +295,7 @@ class ApiBookServiceTest {
 
         // then
         assertThrows(
-            PublisherNotFoundException.class, () -> bookService.saveNewBook(bookSaveRequest)
+            BusinessNumberNotFoundException.class, () -> bookService.saveNewBook(bookSaveRequest)
         );
     }
 
