@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bloobook.bookmanageapp.common.dto.request.PublisherSaveRequest;
+import io.bloobook.bookmanageapp.docs.PublisherDocument;
 import io.bloobook.bookmanageapp.service.ApiPublisherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,10 +59,10 @@ class ApiPublisherControllerTest {
     void registPublisher ()  throws Exception {
         // given
         PublisherSaveRequest saveRequest = PublisherSaveRequest.builder()
-            .businessNumber("A-2938-293")
-            .telNumber("02-3948-3932")
             .name("책 사랑")
             .address("서울특별시 강북")
+            .businessNumber("A-2938-293")
+            .telNumber("02-3948-3932")
             .build();
         // when
         // then
@@ -69,7 +70,8 @@ class ApiPublisherControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(saveRequest))
         )
-            .andExpect(status().isCreated());
+            .andExpect(status().isCreated())
+            .andDo(PublisherDocument.registPublisher());
 
     }
 

@@ -234,3 +234,21 @@ include::{snippets}/rental/return/path-parameters.adoc[]
 === Response
 
 include::{snippets}/rental/return/http-response.adoc[]
+
+
+---
+
+= Publisher (출판사)
+
+== 출판사 신규 등록
+
+=== Request
+
+include::{snippets}/publisher/regist/http-request.adoc[]
+
+include::{snippets}/publisher/regist/request-fields.adoc[]
+
+
+=== Response
+
+include::{snippets}/publisher/regist/http-response.adoc[]
