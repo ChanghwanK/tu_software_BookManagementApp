@@ -8,7 +8,7 @@ import io.bloobook.bookmanageapp.common.dto.response.BookStockCountResponse;
 import io.bloobook.bookmanageapp.common.exception.AlreadyExistBookException;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.CategoryNotFoundException;
-import io.bloobook.bookmanageapp.common.exception.PublisherNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.BusinessNumberNotFoundException;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.bookLocation.BookLocation;
@@ -114,7 +114,7 @@ public class ApiBookService {
 
     private Publisher findPublisherByBusinessNumber ( String businessNumber ) {
         return publisherRepository.findByBusinessNumber(businessNumber)
-            .orElseThrow(() -> new PublisherNotFoundException(businessNumber));
+            .orElseThrow(() -> new BusinessNumberNotFoundException(businessNumber));
     }
 
 }
