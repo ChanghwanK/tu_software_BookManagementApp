@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.asciidoctor.convert' version '1.5.8'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'jacoco'
     id 'java'
 }
 
