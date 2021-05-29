@@ -12,12 +12,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 /**
  * @CreateBy: Bloo
  * @Date: 2021/05/08
  */
-
 
 @ToString
 @Builder
@@ -36,8 +34,7 @@ public class BookSaveRequest {
     private String publisherBusinessNumber;
     private LocalDate publicationAt;
 
-    public Book createNewBook ( Category category, Publisher publisher,
-        BookLocation bookLocation ) {
+    public Book createNewBook ( Category category, Publisher publisher, BookLocation bookLocation ) {
         return Book.builder()
             .bookCode(bookCode)
             .title(title)
