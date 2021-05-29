@@ -15,12 +15,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import org.hibernate.annotations.Where;
 
 /**
  * @CreateBy: Bloo
  * @Date: 2021/05/06
  */
 
+@Where(clause = "publisherStatus = REGISTER")
 @ToString
 @NoArgsConstructor (access = AccessLevel.PROTECTED)
 @Getter
