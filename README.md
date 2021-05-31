@@ -61,4 +61,4 @@ Sprint 는 Notion 과 Project 에서 확인 할 수 있습니다.
 
 ## ERD
 
-![https://images.velog.io/images/somday/post/b78811ce-ede9-4759-a809-ecfe30645dce/BookManagement_20210505_38_04.png](https://images.velog.io/images/somday/post/b78811ce-ede9-4759-a809-ecfe30645dce/BookManagement_20210505_38_04.png)
+![](https://images.velog.io/images/somday/post/54d71968-fcb8-4551-9551-5557afde0dac/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-05-31%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%206.20.01.png)
