@@ -51,9 +51,24 @@ Sprint 는 Notion 과 Project 에서 확인 할 수 있습니다.
 <br>
 <br>
 
-## 🛠️ 사용된 기술
+## 🛠️ Skills
 
-![https://images.velog.io/images/somday/post/8f2998f4-4a3b-4796-b019-e96871f5838e/%EA%B8%B0%EC%88%A0%20%EC%8A%A4%ED%83%9D.png](https://images.velog.io/images/somday/post/8f2998f4-4a3b-4796-b019-e96871f5838e/%EA%B8%B0%EC%88%A0%20%EC%8A%A4%ED%83%9D.png)
+- Spring Boot 2.4.4
+- Spring Data JPA
+- Junit 5
+- RESTDocs
+- Jacoco
+- Gradle
+
+**DB**
+
+- maria DB 10.4
+
+**Version Control**
+
+- Git
+- Git - flow
+
 
 <br>
 <br>
