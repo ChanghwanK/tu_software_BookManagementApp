@@ -89,4 +89,17 @@ public class RentalDocument {
             )
         );
     }
+
+    public static ResultHandler findAllNonReturnBook() {
+        return document("rental/non",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            responseFields(
+                fieldWithPath("[].bookId").type(JsonFieldType.NUMBER).description("도서 ID"),
+                fieldWithPath("[].rentalId").type(JsonFieldType.NUMBER).description("대여 ID"),
+                fieldWithPath("[].email").type(JsonFieldType.STRING).description("사용자 Email"),
+                fieldWithPath("[].bookTitle").type(JsonFieldType.STRING).description("도서 제목")
+            )
+        );
+    }
 }

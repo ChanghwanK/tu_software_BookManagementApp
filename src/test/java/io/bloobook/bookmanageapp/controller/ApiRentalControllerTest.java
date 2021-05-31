@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
+import io.bloobook.bookmanageapp.common.dto.response.NonReturnBooks;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
@@ -227,5 +228,28 @@ class ApiRentalControllerTest {
         mockMvc.perform(delete("/api/rental/{id}", 1L))
             .andExpect(status().isOk())
             .andDo(RentalDocument.returnRentalBook());
+    }
+
+    @DisplayName ("미반납 목록 조회 테스트")
+    @Test
+    void  findNonReturnRentals() throws Exception {
+        // given
+        NonReturnBooks nonReturnBooks_01 = NonReturnBooks.of(rental_01);
+        NonReturnBooks nonReturnBooks_02 = NonReturnBooks.of(rental_02);
+
+        List<NonReturnBooks> nonReturnBooks = List.of (nonReturnBooks_01, nonReturnBooks_02);
+
+        // when
+        when(rentalService.findAllNonReturnBook())
+            .thenReturn(nonReturnBooks);
+
+        // then
+        mockMvc.perform(get("/api/rental/non"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].bookId").value(1L))
+            .andExpect(jsonPath("$.[0].rentalId").value(1L))
+            .andExpect(jsonPath("$.[0].email").value(testUser.getEmail()))
+            .andExpect(jsonPath("$.[0].bookTitle").value(testBook.getTitle()))
+            .andDo(RentalDocument.findAllNonReturnBook());
     }
 }

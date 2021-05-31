@@ -1,6 +1,7 @@
 package io.bloobook.bookmanageapp.controller;
 
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
+import io.bloobook.bookmanageapp.common.dto.response.NonReturnBooks;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.service.ApiRentalService;
 import java.net.URI;
@@ -51,6 +52,11 @@ public class ApiRentalController {
     @GetMapping("/user")
     public ResponseEntity<List<RentalSimpleResponse>> findAllRentalOfUser (@RequestParam(value = "email", required = true) String email) {
        return ResponseEntity.ok().body(rentalService.findRentalsByUserEmail(email));
+    }
+
+    @GetMapping("/non")
+    public ResponseEntity<List<NonReturnBooks>> findAllNonReturnBook () {
+        return ResponseEntity.ok().body(rentalService.findAllNonReturnBook());
     }
 
     @PatchMapping("/{id}")

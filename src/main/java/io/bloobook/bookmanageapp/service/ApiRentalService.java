@@ -1,11 +1,13 @@
 package io.bloobook.bookmanageapp.service;
 
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
+import io.bloobook.bookmanageapp.common.dto.response.NonReturnBooks;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
+import io.bloobook.bookmanageapp.common.enumclass.status.RentalStatus;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
+import io.bloobook.bookmanageapp.common.exception.NotExistEmailException;
 import io.bloobook.bookmanageapp.common.exception.RentalNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
-import io.bloobook.bookmanageapp.common.exception.NotExistEmailException;
 import io.bloobook.bookmanageapp.entity.book.Book;
 import io.bloobook.bookmanageapp.entity.book.BookRepository;
 import io.bloobook.bookmanageapp.entity.rental.Rental;
@@ -43,13 +45,9 @@ public class ApiRentalService {
         savedBook.decreaseStockCount();
 
         User savedUser = findUserById(rentalRequest.getUserId());
-        System.out.println(rentalRequest.getUserId());
         savedUser.increaseBookRentalCount();
 
-        Rental newRental = Rental.of(savedBook, savedUser);
-        rentalRepository.save(newRental);
-
-        return newRental;
+        return rentalRepository.save(Rental.of(savedBook, savedUser));
     }
 
     @Transactional (readOnly = true)
@@ -63,6 +61,13 @@ public class ApiRentalService {
         findUserByEmail(email);
         return Collections.unmodifiableList(RentalSimpleResponse
             .listOf(rentalRepository.findRentalByUserEmail(email)));
+    }
+
+    @Transactional (readOnly = true)
+    public List<NonReturnBooks> findAllNonReturnBook () {
+
+        return Collections.unmodifiableList(NonReturnBooks
+            .listOf(rentalRepository.findAllNonRentals(RentalStatus.NON_RETURN)));
     }
 
     @Transactional
@@ -98,4 +103,5 @@ public class ApiRentalService {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new NotExistEmailException(email));
     }
+
 }

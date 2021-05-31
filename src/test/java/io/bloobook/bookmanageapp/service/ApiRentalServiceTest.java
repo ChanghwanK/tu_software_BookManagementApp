@@ -3,17 +3,16 @@ package io.bloobook.bookmanageapp.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
+import io.bloobook.bookmanageapp.common.dto.response.NonReturnBooks;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
+import io.bloobook.bookmanageapp.common.enumclass.status.RentalStatus;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.NotExistBookStockException;
 import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
@@ -123,28 +122,6 @@ class ApiRentalServiceTest {
             .build();
     }
 
-    @DisplayName ("도서 저장을 테스트")
-    @Test
-    void registRental () {
-        // when
-        when(userRepository.findById(anyLong()))
-            .thenReturn(Optional.of(testUser));
-
-        when(bookRepository.findById(anyLong()))
-            .thenReturn(Optional.of(testBook));
-
-        Rental rental = rentalService.registRental(rentalRequest);
-
-        // then
-         verify(rentalRepository, times(1)).save(any());
-
-         assertAll(
-            () -> assertThat(rental.getBook().getTotalRentalCount()).isEqualTo(1),
-            () -> assertThat(rental.getBook().getStockCount()).isEqualTo(4),
-            () -> assertThat(rental.getUser().getTotalRentalBookCount()).isEqualTo(1)
-        );
-    }
-
 
     @DisplayName ("특정 기간동안 대여 도서 목록 조회를 테스트")
     @Test
@@ -217,6 +194,41 @@ class ApiRentalServiceTest {
          * 대여 날짜는 변경되지 않기 때문에 대여 날을 기준으로 + 3 weeks 가 된다.
          */
         assertThat(rental.getExpiredAt()).isEqualTo(rental.getStartAt().plusWeeks(3));
+    }
+
+    @DisplayName ("미반납 도서 조회를 테스트")
+    @Test
+    void findNonReturnBook () {
+        // given
+        Rental nonReturnBook_01 = Rental.builder()
+            .id(3L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        Rental nonReturnBook_02 = Rental.builder()
+            .id(4L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        nonReturnBook_01.updateRentalStatusToNonReturn();
+        nonReturnBook_02.updateRentalStatusToNonReturn();
+
+        // when
+        when(rentalRepository.findAllNonRentals(RentalStatus.NON_RETURN))
+            .thenReturn(List.of(nonReturnBook_01, nonReturnBook_02));
+
+        List<NonReturnBooks> nonReturnBooks = rentalService.findAllNonReturnBook();
+
+        // then
+//        assertThat(nonReturnBooks.size()).isEqualTo(2);
+        assertAll (
+            () -> assertThat(nonReturnBooks.size()).isEqualTo(2),
+            () -> assertThat(nonReturnBooks.get(0).getRentalId()).isEqualTo(nonReturnBook_01.getId()),
+            () -> assertThat(nonReturnBooks.get(1).getRentalId()).isEqualTo(nonReturnBook_02.getId())
+        );
+
     }
 
     @DisplayName ("대여 반납을 테스트")
