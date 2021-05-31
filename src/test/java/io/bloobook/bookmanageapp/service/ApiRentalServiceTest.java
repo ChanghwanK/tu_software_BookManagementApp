@@ -3,11 +3,8 @@ package io.bloobook.bookmanageapp.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
@@ -123,28 +120,6 @@ class ApiRentalServiceTest {
             .book(testBook)
             .user(testUser)
             .build();
-    }
-
-    @DisplayName ("도서 저장을 테스트")
-    @Test
-    void registRental () {
-        // when
-        when(userRepository.findById(anyLong()))
-            .thenReturn(Optional.of(testUser));
-
-        when(bookRepository.findById(anyLong()))
-            .thenReturn(Optional.of(testBook));
-
-        Rental rental = rentalService.registRental(rentalRequest);
-
-        // then
-         verify(rentalRepository, times(1)).save(any());
-
-         assertAll(
-            () -> assertThat(rental.getBook().getTotalRentalCount()).isEqualTo(1),
-            () -> assertThat(rental.getBook().getStockCount()).isEqualTo(4),
-            () -> assertThat(rental.getUser().getTotalRentalBookCount()).isEqualTo(1)
-        );
     }
 
 

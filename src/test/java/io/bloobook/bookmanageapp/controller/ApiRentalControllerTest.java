@@ -250,6 +250,6 @@ class ApiRentalControllerTest {
             .andExpect(jsonPath("$.[0].rentalId").value(1L))
             .andExpect(jsonPath("$.[0].email").value(testUser.getEmail()))
             .andExpect(jsonPath("$.[0].bookTitle").value(testBook.getTitle()))
-            ;
+            .andDo(RentalDocument.findAllNonReturnBook());
     }
 }
