@@ -84,4 +84,7 @@ public class Rental extends BaseTimeEntity {
         this.onRental = false;
     }
 
+    public void updateRentalStatusToNonReturn() {
+       this.rentalStatus = RentalStatus.NON_RETURN;
+    }
 }

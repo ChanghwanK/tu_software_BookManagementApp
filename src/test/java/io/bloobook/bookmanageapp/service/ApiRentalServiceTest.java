@@ -11,9 +11,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.bloobook.bookmanageapp.common.dto.request.RentalRequest;
+import io.bloobook.bookmanageapp.common.dto.response.NonReturnBooks;
 import io.bloobook.bookmanageapp.common.dto.response.RentalSimpleResponse;
 import io.bloobook.bookmanageapp.common.enumclass.status.CategoryStatus;
 import io.bloobook.bookmanageapp.common.enumclass.status.PublisherStatus;
+import io.bloobook.bookmanageapp.common.enumclass.status.RentalStatus;
 import io.bloobook.bookmanageapp.common.exception.BookNotFoundException;
 import io.bloobook.bookmanageapp.common.exception.NotExistBookStockException;
 import io.bloobook.bookmanageapp.common.exception.UserNotFoundException;
@@ -217,6 +219,41 @@ class ApiRentalServiceTest {
          * 대여 날짜는 변경되지 않기 때문에 대여 날을 기준으로 + 3 weeks 가 된다.
          */
         assertThat(rental.getExpiredAt()).isEqualTo(rental.getStartAt().plusWeeks(3));
+    }
+
+    @DisplayName ("미반납 도서 조회를 테스트")
+    @Test
+    void findNonReturnBook () {
+        // given
+        Rental nonReturnBook_01 = Rental.builder()
+            .id(3L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        Rental nonReturnBook_02 = Rental.builder()
+            .id(4L)
+            .book(testBook)
+            .user(testUser)
+            .build();
+
+        nonReturnBook_01.updateRentalStatusToNonReturn();
+        nonReturnBook_02.updateRentalStatusToNonReturn();
+
+        // when
+        when(rentalRepository.findAllNonRentals(RentalStatus.NON_RETURN))
+            .thenReturn(List.of(nonReturnBook_01, nonReturnBook_02));
+
+        List<NonReturnBooks> nonReturnBooks = rentalService.findAllNonReturnBook();
+
+        // then
+//        assertThat(nonReturnBooks.size()).isEqualTo(2);
+        assertAll (
+            () -> assertThat(nonReturnBooks.size()).isEqualTo(2),
+            () -> assertThat(nonReturnBooks.get(0).getRentalId()).isEqualTo(nonReturnBook_01.getId()),
+            () -> assertThat(nonReturnBooks.get(1).getRentalId()).isEqualTo(nonReturnBook_02.getId())
+        );
+
     }
 
     @DisplayName ("대여 반납을 테스트")
