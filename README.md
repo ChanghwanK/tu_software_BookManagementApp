@@ -1,4 +1,4 @@
-# tu_software_BookAdminApp
+# 도서 관리를 위한 도서 관리자용 RESTful API
 
 <br>
 
