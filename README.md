@@ -62,7 +62,7 @@ Sprint 는 Notion 과 Project 에서 확인 할 수 있습니다.
 
 **DB**
 
-- maria DB 10.4
+- H2
 
 **Version Control**
 
